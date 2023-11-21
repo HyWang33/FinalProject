@@ -9,6 +9,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import models.LoginModel;
 
@@ -26,6 +27,21 @@ public class LoginController {
 
 	public LoginController() {
 		model = new LoginModel();
+	}
+	
+	@FXML
+    private void initialize(){
+		txtUsername.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+            	txtPassword.requestFocus();
+            }
+        });
+		
+		txtPassword.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+            	onSubmit();
+            }
+        });
 	}
 	
 	public void onSubmit() {

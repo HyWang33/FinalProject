@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class OrderModel extends DBConnect {
@@ -25,9 +28,12 @@ public class OrderModel extends DBConnect {
 						" name VARCHAR(45), " +
 						" breed VARCHAR(45), " +
 						" age INTEGER, " + 
-						" birthday Date, " + 
+						" birthday Date, " +
+						" price FLOAT(10, 2) not NULL DEFAULT 0.00," +
 						" isSaled Boolean, " +
-						" PRIMARY KEY ( id ))";
+						" PRIMARY KEY ( id ), " +
+						"CONSTRAINT FK_User FOREIGN KEY (uid) REFERENCES Hongyang_pet_user (id), " +
+						"CONSTRAINT FK_Shop FOREIGN KEY (shopId) REFERENCES Hongyang_pet_list (id))";
 			stmt.executeUpdate(SQL);
 			System.out.println("Created table in given database...");
 			connection.close();
@@ -37,10 +43,10 @@ public class OrderModel extends DBConnect {
 		}
 	}
 	
-	public Vector<Vector<Object>> queryPetList() {
+	public Vector<Map> queryPetList() {
 		ResultSet rs = null;
-		String SQL = "SELECT * FROM Hongyang_pet_list";
-		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		String SQL = "SELECT * FROM Hongyang_pet_order";
+		Vector<Map> data = new Vector<>();
 		Vector<String> column = new Vector<String>();
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			
@@ -59,10 +65,16 @@ public class OrderModel extends DBConnect {
 			while (rs.next()) {
 				Vector<Object> row = new Vector<Object>(columnNum);
 				
-				for (int i = 1; i <= columnNum; i++) {
-					row.addElement(rs.getObject(i));
-				}
-				data.addElement(row);
+				Map orderMap = new HashMap<>();
+				orderMap.put("name", rs.getObject("name"));
+				
+				orderMap.put("breed", rs.getObject("breed"));
+				orderMap.put("age", rs.getObject("age"));
+				orderMap.put("birthday", rs.getObject("birthday"));
+				orderMap.put("isSaled", rs.getObject("isSaled"));
+				orderMap.put("price", rs.getObject("price"));
+				orderMap.put("buyer", rs.getObject("buyer"));
+				data.addElement(orderMap);
 			}
 			
 			
@@ -79,4 +91,5 @@ public class OrderModel extends DBConnect {
 		}
 		return data;
 	}
+
 }

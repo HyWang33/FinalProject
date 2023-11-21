@@ -28,7 +28,8 @@ public class PetListModel extends DBConnect {
 						" name VARCHAR(45), " +
 						" breed VARCHAR(45), " +
 						" age INTEGER, " + 
-						" birthday Date, " +
+						" birthday DATE, " +
+						" price FLOAT(10, 2) not NULL DEFAULT 0.00," +
 						" isSaled Boolean, " +
 						" PRIMARY KEY ( id ))";
 			stmt.executeUpdate(SQL);
@@ -63,7 +64,7 @@ public class PetListModel extends DBConnect {
 				Vector<Object> row = new Vector<Object>(columnNum);
 				
 				for (int i = 1; i <= columnNum; i++) {
-					row.addElement(rs.getObject(i));
+					row.addElement(i == 7 ? rs.getBoolean("isSaled") : rs.getObject(i));
 				}
 				data.addElement(row);
 			}
@@ -82,4 +83,10 @@ public class PetListModel extends DBConnect {
 		}
 		return data;
 	}
+}
+
+class Pet {
+	private String name;
+	private String breed;
+	private Integer age;
 }

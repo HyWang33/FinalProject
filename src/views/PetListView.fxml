@@ -10,14 +10,14 @@
         <columns>
             <!-- <TableColumn prefWidth="75.0" />
           <TableColumn prefWidth="75.0" text="photo" /> -->
+          <TableColumn fx:id="numberColumn" prefWidth="75.0" text="" />
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="name" />
-            <TableColumn fx:id="breedColumn" prefWidth="75.0" text="breed" />
-            <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price" />
-            <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
-            <!-- <TableColumn prefWidth="77.0" text="birthday" /> -->
-            <TableColumn fx:id="operateColumn" prefWidth="73.0" text="age">
-            <!-- <Button mnemonicParsing="false" styleClass="btn" text="Login"></Button> -->
-            </TableColumn>
+          <TableColumn fx:id="breedColumn" prefWidth="75.0" text="breed" />
+          <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
+          <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price" />
+          <!-- <TableColumn prefWidth="77.0" text="birthday" /> -->
+          <TableColumn fx:id="isSaledColumn" prefWidth="73.0" text="is saled" />
+          <TableColumn fx:id="operateColumn" prefWidth="73.0" text="operate" />
         </columns>
       </TableView>
    </children>

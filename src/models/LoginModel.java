@@ -23,7 +23,7 @@ public class LoginModel extends DBConnect {
 						" age INTEGER, " + 
 						" gender VARCHAR(6), " +
 						" birthday Date, " + 
-						" balance numeric(8, 2), " + 
+						" balance FLOAT(10, 2) NOT NULL DEFAULT 0.00, " + 
 						" username VARCHAR(45), " +
 						" password VARCHAR(45), " +
 						" PRIMARY KEY ( id ))";

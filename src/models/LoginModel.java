@@ -1,9 +1,14 @@
 package models;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -36,8 +41,12 @@ public class LoginModel extends DBConnect {
 		}
 	}
 	
-	public Boolean queryUser(String username, String password) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map queryUser(String username, String password) throws NoSuchAlgorithmException {
 		ResultSet rs = null;
+		boolean isValid = false;
+		Map userMap = new HashMap();
+		userMap.put("isValid", isValid);
 		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			stmt.setString(1, username);
@@ -46,16 +55,35 @@ public class LoginModel extends DBConnect {
 			System.out.println("console log user");
 			if (rs.next()) {
 				String realPassword = rs.getString("password");
-				System.out.println("age: " + rs.getInt("age"));
-				System.out.println("password: " + realPassword + ", my password: " + password);
-//				connection.close();
-				return password.equals(realPassword);
+				String gender = rs.getString("gender");
+				String email = rs.getString("email");
+				Date birthday = rs.getDate("birthday");
+				Float balance = rs.getFloat("balance");
+				userMap.put("username", username);
+				userMap.put("gender", gender);
+				userMap.put("email", email);
+				userMap.put("birthday", birthday);
+				userMap.put("balance", balance);
+				isValid = toHash(password).equals(realPassword);
+				userMap.put("isValid", isValid);
+				return userMap;
 			}
 			System.out.println("user not defined");
 			
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
-		return false;
+		return userMap;
+	}
+	
+	public String toHash(String password) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		md.update(password.getBytes());
+		byte byteData[] = md.digest();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < byteData.length; i++) {
+			sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		return sb.toString();
 	}
 }

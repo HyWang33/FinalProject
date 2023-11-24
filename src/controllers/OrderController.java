@@ -24,8 +24,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.OrderModel;
+import models.PetListModel;
 
 public class OrderController {
 	@FXML
@@ -46,14 +48,34 @@ public class OrderController {
 	private TableColumn<Pet, Integer> numberColumn;
 	
 	private OrderModel model;
+	private Stage stage;
+	private Stage orderStage;
+	private Map userMap;
+	private Thread t1;
 	
 	private final ObservableList<Pet> obList = FXCollections.observableArrayList();
 
 	public OrderController() {
-		model = new OrderModel();
-		System.out.print("petListController");
-		getPetList();
+		t1 = new Thread(() -> {
+			model = new OrderModel();
+			System.out.print("petListController");
+			getPetList();
+		});
+		t1.start();
 	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public void setOrderStage(Stage stage) {
+		this.orderStage = stage;
+	}
+	
+	public void setUser(Map userMap) {
+		this.userMap = userMap;
+	}
+	
 	@FXML
     private void initialize(){
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().name);
@@ -102,19 +124,29 @@ public class OrderController {
         };
     }
 	
-	public void puchasePet() {
+	public void onBack() {
+		t1.interrupt();
 		try {
-			AnchorPane root;
-			root = (AnchorPane) FXMLLoader.load(getClass().getResource("/views/OrderView.fxml"));
-			Main.stage.setTitle("Order List View");
-			Scene scene = new Scene(root);
-			Main.stage.setScene(scene);
+			orderStage.close();
+			stage.show();
+			
+//			AnchorPane root;
+//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
+//			root = (AnchorPane) loader.load();
+//			stage.setTitle("Pet List View");
+//			PetListController petListController = loader.getController();
+//			petListController.setStage(stage);
+//			petListController.setUser(userMap);
+//			Scene scene = new Scene(root);
+//			stage.setScene(scene);
 		} catch (Exception e) {
 			System.out.println("Error occured while inflating view: " + e);
 		}
 	}
 	
-	
+	public void puchasePet() {
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void getPetList() {

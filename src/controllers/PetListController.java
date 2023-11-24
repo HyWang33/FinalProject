@@ -1,8 +1,10 @@
 package controllers;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
 
 import application.Main;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.PetListModel;
 
@@ -44,14 +47,31 @@ public class PetListController {
 	private TableColumn<Pet, Integer> numberColumn;
 	
 	private PetListModel model;
+	private Map userMap;
+	private Stage stage;
+	private Thread t1;
 	
 	private final ObservableList<Pet> obList = FXCollections.observableArrayList();
 
 	public PetListController() {
-		model = new PetListModel();
-		System.out.print("petListController");
-		getPetList();
+		t1 = new Thread(() -> {
+			model = new PetListModel();
+			System.out.print("petListController");
+			getPetList();
+		});
+		t1.start();
+		
 	}
+	// get user info from LoginController and set data
+	public void setUser(Map userMap) {
+		this.userMap = userMap;
+		System.out.println("setUser:" + userMap);
+	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
 	@FXML
     private void initialize(){
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().name);
@@ -85,7 +105,7 @@ public class PetListController {
                             // 获取当前行的数据对象
                             Pet pet = getTableView().getItems().get(getIndex());
                             System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
-                            puchasePet();
+                            onPurchase();
                         });
                     }
 
@@ -104,19 +124,54 @@ public class PetListController {
         };
     }
 	
-	public void puchasePet() {
+	public void onPurchase() {
+		t1.interrupt();
+		onGoOrder();
+//		try {
+//			AnchorPane root;
+//			root = (AnchorPane) FXMLLoader.load(getClass().getResource("/views/OrderView.fxml"));
+//			Main.stage.setTitle("Order List View");
+//			Scene scene = new Scene(root);
+//			Main.stage.setScene(scene);
+//		} catch (Exception e) {
+//			System.out.println("Error occured while inflating view: " + e);
+//		}
+	}
+	
+	public void onGoOrder() {
 		try {
 			AnchorPane root;
-			root = (AnchorPane) FXMLLoader.load(getClass().getResource("/views/OrderView.fxml"));
-			Main.stage.setTitle("Order List View");
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/OrderView.fxml"));
+			root = (AnchorPane) loader.load();
+			Stage orderStage = new Stage();
+//			Main.stage.setTitle("Order List View");
+//			stage.setTitle("Pet Order View");
+			OrderController orderController = loader.getController();
+			orderController.setStage(stage);
+			orderController.setOrderStage(orderStage);
+			orderController.setUser(userMap);
 			Scene scene = new Scene(root);
-			Main.stage.setScene(scene);
+			orderStage.setScene(scene);
+//			stage.setScene(scene);
+			orderStage.show();
+			stage.close();
+//			Main.stage.setScene(scene);
 		} catch (Exception e) {
 			System.out.println("Error occured while inflating view: " + e);
 		}
 	}
 	
-	
+	public void onGoBack() throws IOException {
+		t1.interrupt();
+		AnchorPane root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
+		root = (AnchorPane) loader.load();
+		LoginController loginController = loader.getController();
+		loginController.setStage(stage);
+		Scene scene = new Scene(root);
+		stage.setTitle("Customer Login View");
+		stage.setScene(scene);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void getPetList() {

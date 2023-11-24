@@ -7,6 +7,20 @@
 * 
 */
 
-.btn {
-	/* -fx-color: blue; */
+.button {
+    -fx-background-color: #2196F3; /* 按钮背景颜色 */
+    -fx-text-fill: white; /* 文本颜色 */
+    -fx-font-size: 14px; /* 字体大小 */
+    -fx-padding: 8 16; /* 内边距 */
+    -fx-border-radius: 5px; /* 圆角 */
+}
+
+/* 鼠标悬停时的样式 */
+.button:hover {
+    -fx-background-color: #FFAB91; /* 鼠标悬停时的背景颜色 */
+}
+
+/* 按钮按下时的样式 */
+.button:pressed {
+    -fx-background-color: #FFAB91; /* 按钮按下时的背景颜色 */
 }

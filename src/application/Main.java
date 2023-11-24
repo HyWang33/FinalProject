@@ -1,5 +1,6 @@
 package application;
 
+import controllers.ApplicationController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,12 +19,17 @@ public class Main extends Application {
 		try {
 
 			stage = primaryStage;
-			//AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/views/LoginView.fxml"));
-		    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/LoginView.fxml"));
+			
+			
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/ApplicationView.fxml"));
+//			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/LoginView.fxml"));
+//		    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/SignUpView.fxml"));
 	        AnchorPane root = (AnchorPane) loader.load();
 			Scene scene = new Scene(root);
+			ApplicationController applicationController = loader.getController();
+			applicationController.setStage(stage);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			stage.setTitle("Login View");
+			stage.setTitle("Pet Shop");
 			stage.setScene(scene);
 			stage.show();
 

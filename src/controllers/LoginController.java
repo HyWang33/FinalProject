@@ -73,6 +73,7 @@ public class LoginController {
 	}
 	
 	public void onSubmit() throws NoSuchAlgorithmException {
+		t1.interrupt();
 		lblError.setText("");
 		String username = this.txtUsername.getText();
 		String password = this.txtPassword.getText();
@@ -100,7 +101,6 @@ public class LoginController {
 		boolean isValid = (boolean) userMap.get("isValid");
 		alertCreate(isValid, username);
 		if (!isValid) return;
-		t1.interrupt();
 		try {
 			AnchorPane root;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
@@ -123,6 +123,40 @@ public class LoginController {
 		alert.setHeaderText(isValid ? "Login Successfully" : "Login Faild");
 		alert.setContentText(isValid ? "Welcome, " + username + "!" : "The username or password is incorrect!");
 		alert.showAndWait();
+	}
+	
+	public void onGoSignUp() {
+		t1.interrupt();
+		try {
+			AnchorPane root;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
+			root = (AnchorPane) loader.load();
+			stage.setTitle("Sign Up View");
+			SignUpController signUpController = loader.getController();
+			signUpController.setStage(stage);
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		} catch (Exception e) {
+			System.out.println("Error occured while inflating view: " + e);
+		}
+	}
+	
+	public void onBack() {
+		t1.interrupt();
+		try {
+			
+			AnchorPane root;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ApplicationView.fxml"));
+			root = (AnchorPane) loader.load();
+			stage.setTitle("Pet Shop");
+			ApplicationController applicationController = loader.getController();
+			applicationController.setStage(stage);
+//			applicationController.setUser(userMap);
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		} catch (Exception e) {
+			System.out.println("Error occured while inflating view: " + e);
+		}
 	}
 	
 }

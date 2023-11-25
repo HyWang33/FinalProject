@@ -54,11 +54,13 @@ public class LoginModel extends DBConnect {
 			rs = stmt.executeQuery();
 			System.out.println("console log user");
 			if (rs.next()) {
+				Integer id = rs.getInt("id");
 				String realPassword = rs.getString("password");
 				String gender = rs.getString("gender");
 				String email = rs.getString("email");
 				Date birthday = rs.getDate("birthday");
 				Float balance = rs.getFloat("balance");
+				userMap.put("id", id);
 				userMap.put("username", username);
 				userMap.put("gender", gender);
 				userMap.put("email", email);

@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class PetListModel extends DBConnect {
@@ -41,10 +43,11 @@ public class PetListModel extends DBConnect {
 		}
 	}
 	
-	public Vector<Vector<Object>> queryPetList() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Vector<Map> queryPetList() {
 		ResultSet rs = null;
 		String SQL = "SELECT * FROM Hongyang_pet_list";
-		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		Vector<Map> data = new Vector<Map>();
 		Vector<String> column = new Vector<String>();
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			
@@ -61,12 +64,14 @@ public class PetListModel extends DBConnect {
 			}
 			System.out.println("columnNum" + columnNum);
 			while (rs.next()) {
+				Map petMap = new HashMap();
 				Vector<Object> row = new Vector<Object>(columnNum);
 				
 				for (int i = 1; i <= columnNum; i++) {
-					row.addElement(i == 7 ? rs.getBoolean("isSaled") : rs.getObject(i));
+					petMap.put(column.get(i - 1), column.get(i - 1).equals("isSaled") ? rs.getBoolean("isSaled") : rs.getObject(i));
+//					row.addElement(i == 7 ? rs.getBoolean("isSaled") : rs.getObject(i));
 				}
-				data.addElement(row);
+				data.addElement(petMap);
 			}
 			
 			
@@ -83,10 +88,27 @@ public class PetListModel extends DBConnect {
 		}
 		return data;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void queryCreateOrder(Map petInfo) {
+		Integer petId = (Integer) petInfo.get("petId");
+		Integer userId = (Integer) petInfo.get("userId");
+		Float price = (Float) petInfo.get("price");
+		Float balance = (Float) petInfo.get("balance");
+		Float newBalance = balance - price;
+		String SQL = "UPDATE Hongyang_pet_list SET isSaled = ? WHERE id = ?" + petId;
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			pstmt.setInt(1, 1);
+			pstmt.setInt(2, petId);
+			pstmt.executeUpdate();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+		OrderModel.createOrder(petInfo);
+		SignUpModel.updateBalance(userId, newBalance);
+	}
+	
+	
 }
 
-class Pet {
-	private String name;
-	private String breed;
-	private Integer age;
-}
+

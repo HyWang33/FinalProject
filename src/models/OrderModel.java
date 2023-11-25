@@ -23,8 +23,8 @@ public class OrderModel extends DBConnect {
 			
 			String SQL = "CREATE TABLE IF NOT EXISTS Hongyang_pet_order " +
 						"(id INTEGER not NULL AUTO_INCREMENT, " +
-						" uid INTEGER not NULL, " +
-						" shopId INTEGER not NULL, " +
+						" userId INTEGER not NULL, " +
+						" petId INTEGER not NULL, " +
 						" name VARCHAR(45), " +
 						" breed VARCHAR(45), " +
 						" age INTEGER, " + 
@@ -32,8 +32,8 @@ public class OrderModel extends DBConnect {
 						" price FLOAT(10, 2) not NULL DEFAULT 0.00," +
 						" isSaled Boolean, " +
 						" PRIMARY KEY ( id ), " +
-						"CONSTRAINT FK_User FOREIGN KEY (uid) REFERENCES Hongyang_pet_user (id), " +
-						"CONSTRAINT FK_Shop FOREIGN KEY (shopId) REFERENCES Hongyang_pet_list (id))";
+						"CONSTRAINT FK_User FOREIGN KEY (userId) REFERENCES Hongyang_pet_user (id), " +
+						"CONSTRAINT FK_Shop FOREIGN KEY (petId) REFERENCES Hongyang_pet_list (id))";
 			stmt.executeUpdate(SQL);
 			System.out.println("Created table in given database...");
 			connection.close();
@@ -43,7 +43,8 @@ public class OrderModel extends DBConnect {
 		}
 	}
 	
-	public Vector<Map> queryPetList() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Vector<Map> queryOrderList() {
 		ResultSet rs = null;
 		String SQL = "SELECT * FROM Hongyang_pet_order";
 		Vector<Map> data = new Vector<>();
@@ -91,5 +92,31 @@ public class OrderModel extends DBConnect {
 		}
 		return data;
 	}
-
+	
+	@SuppressWarnings("rawtypes")
+	public static void createOrder(Map orderInfo) {
+		String SQL = "INSERT INTO Hongyang_pet_order(userId, petId, name, breed, age, price, buyer) " +
+				"VALUES(?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			Integer userId = (Integer) orderInfo.get("userId");
+			Integer petId = (Integer) orderInfo.get("petId");
+			String buyer = (String) orderInfo.get("buyer");
+			String name = (String) orderInfo.get("name");
+			String breed = (String) orderInfo.get("breed");
+			Integer age = (Integer) orderInfo.get("age");
+			Float price = (Float) orderInfo.get("price");
+			System.out.println("userId:" + userId);
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, petId);
+			pstmt.setString(3, name);
+			pstmt.setString(4, breed);
+			pstmt.setInt(5, age);
+			pstmt.setFloat(6, price);
+			pstmt.setString(7, buyer);
+			pstmt.executeUpdate();
+			System.out.println("Order creaated!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -4,15 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import models.LoginModel;
 import models.SignUpModel;
 
 public class SignUpController {
@@ -36,10 +42,26 @@ public class SignUpController {
 	}
 	
 	private SignUpModel model;
+	private Stage stage;
+	private Map userMap;
+	private Thread t1;
 	
 	public SignUpController() {
-		model = new SignUpModel();
+		t1 = new Thread(()-> {
+			model = new SignUpModel();
+		});
+		t1.start();
 	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public void setUser(Map userMap) {
+		this.userMap = userMap;
+	}
+	
+	
 	
 	public void onClear() {
 		this.txtUsername.setText("");;
@@ -93,5 +115,17 @@ public class SignUpController {
 		Pattern pattern = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();
+	}
+	
+	public void onGoBack() throws IOException {
+		t1.interrupt();
+		AnchorPane root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
+		root = (AnchorPane) loader.load();
+		LoginController loginController = loader.getController();
+		loginController.setStage(stage);
+		Scene scene = new Scene(root);
+		stage.setTitle("Customer Login View");
+		stage.setScene(scene);
 	}
 }

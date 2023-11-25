@@ -150,7 +150,7 @@ public class OrderController {
 	
 	@SuppressWarnings("unchecked")
 	public void getPetList() {
-		Vector<Map> data = model.queryPetList();
+		Vector<Map> data = model.queryOrderList();
 		System.out.println("getList: " + data);
 		for (int i = 0; i < data.size(); i++) {
 			Map orderMap = (Map) data.get(i);

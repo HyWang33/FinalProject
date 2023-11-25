@@ -4,8 +4,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PetListController">
    <children>
@@ -13,7 +17,7 @@
         <columns>
             <!-- <TableColumn prefWidth="75.0" />
           <TableColumn prefWidth="75.0" text="photo" /> -->
-          <TableColumn fx:id="numberColumn" prefWidth="75.0" text="" />
+          <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" />
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="name" />
           <TableColumn fx:id="breedColumn" prefWidth="75.0" text="breed" />
           <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
@@ -27,8 +31,24 @@
       <Label layoutX="540.0" layoutY="30.0" text="username:" />
       <Label layoutX="546.0" layoutY="76.0" text="balance:" />
       
-      <Label layoutX="624.0" layoutY="30.0" text="test1" />
-      <Label layoutX="623.0" layoutY="76.0" text="100" />
-      <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" prefWidth="60.0" onAction="#onGoBack" text="Back" />
+      <Label fx:id="txtUsername" layoutX="624.0" layoutY="30.0" />
+      <Label fx:id="txtBalance" layoutX="623.0" layoutY="76.0" text="100" />
+      <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="60.0" text="Back" />
+      <Pane fx:id="imagePane" layoutX="224.0" layoutY="210.0" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="70.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+            	<image>
+                  <Image url="@/images/loading.gif" />
+              </image>
+            </ImageView>
+            <Label layoutX="70.0" layoutY="130.0" text="Loading...">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" prefWidth="60.0" onAction="#onGoOrder" text="Order" />
+      <Button layoutX="305.0" layoutY="43.0" mnemonicParsing="false" prefWidth="62.0" onAction="#onGetList" text="Refresh" />
    </children>
 </AnchorPane>

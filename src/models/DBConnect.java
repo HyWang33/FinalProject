@@ -8,7 +8,7 @@ public class DBConnect {
 	static final String DB_URL = "jdbc:mysql://www.papademas.net:3307/510fp?autoReconnect=true&useSSL=false";
 	static final String USER = "fp510", PASSWORD = "510";
 	
-	protected Connection connection;
+	protected static Connection connection;
 
 	public Connection getConnection() {
 		return connection;

@@ -57,6 +57,17 @@ public class SignUpModel extends DBConnect {
 		return false;
 	}
 	
+	public static void updateBalance(Integer userId, Float balance) {
+		String SQL = "UPDATE Hongyang_pet_user SET balance = ? WHERE id = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
+			stmt.setFloat(1, balance);
+			stmt.setInt(2, userId);
+			stmt.executeUpdate();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+	}
+	
 	public String toHash(String password) throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		md.update(password.getBytes());

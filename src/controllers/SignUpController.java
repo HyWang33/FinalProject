@@ -11,11 +11,13 @@ import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.LoginModel;
@@ -45,6 +47,7 @@ public class SignUpController {
 	private Stage stage;
 	private Map userMap;
 	private Thread t1;
+	private Integer role = 1;
 	
 	public SignUpController() {
 		t1 = new Thread(()-> {
@@ -61,7 +64,9 @@ public class SignUpController {
 		this.userMap = userMap;
 	}
 	
-	
+	public void setRole(Integer role) {
+		this.role = role;
+	}
 	
 	public void onClear() {
 		this.txtUsername.setText("");;
@@ -107,6 +112,7 @@ public class SignUpController {
 		userMap.put("gender", gender);
 		userMap.put("email", email);
 		userMap.put("birthday", java.sql.Date.valueOf(birthday));
+		userMap.put("role", role);
 		model.createUser(userMap);
 	}
 	
@@ -124,8 +130,17 @@ public class SignUpController {
 		root = (AnchorPane) loader.load();
 		LoginController loginController = loader.getController();
 		loginController.setStage(stage);
+		loginController.setRole(role);
 		Scene scene = new Scene(root);
-		stage.setTitle("Customer Login View");
+		stage.setTitle(role == 1 ? "Customer Login View" : "Admin Login View");
 		stage.setScene(scene);
+	}
+	
+	public void alertCreate(Boolean isValid, String username) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Sign Up Tip");
+		alert.setHeaderText(isValid ? "Sign Up Successfully" : "Sign Up Faild");
+		alert.setContentText(isValid ? "Congratulation, " + username + "!" : "Admin Sign Up Failed");
+		alert.showAndWait();
 	}
 }

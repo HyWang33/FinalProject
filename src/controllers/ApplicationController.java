@@ -28,12 +28,12 @@ public class ApplicationController {
 	}
 	
 	public void onGoAdmin() throws IOException {
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/AdminLoginView.fxml"));
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/LoginView.fxml"));
         AnchorPane root = (AnchorPane) loader.load();
 		Scene scene = new Scene(root);
-//		LoginController loginController = loader.getController();
-//		loginController.setStage(stage);
-//		loginController.setRole(2);
+		LoginController loginController = loader.getController();
+		loginController.setStage(stage);
+		loginController.setRole(2);
 		scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 		stage.setTitle("Admin Login View");
 		stage.setScene(scene);

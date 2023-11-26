@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.OrderModel;
@@ -46,6 +47,8 @@ public class OrderController {
 //	private TableColumn<Pet, Boolean> operateColumn;
 	@FXML
 	private TableColumn<Pet, Integer> numberColumn;
+	@FXML
+	private Pane imagePane;
 	
 	private OrderModel model;
 	private Stage stage;
@@ -59,6 +62,7 @@ public class OrderController {
 		t1 = new Thread(() -> {
 			model = new OrderModel();
 			System.out.print("petListController");
+			this.imagePane.setVisible(true);
 			getPetList();
 		});
 		t1.start();
@@ -150,8 +154,10 @@ public class OrderController {
 	
 	@SuppressWarnings("unchecked")
 	public void getPetList() {
-		Vector<Map> data = model.queryOrderList();
+		this.imagePane.setVisible(true);
+		Vector<Map> data = model.queryOrderList(userMap);
 		System.out.println("getList: " + data);
+		this.imagePane.setVisible(false);
 		for (int i = 0; i < data.size(); i++) {
 			Map orderMap = (Map) data.get(i);
 			String name = (String) orderMap.get("name");
@@ -162,8 +168,6 @@ public class OrderController {
 			
 //			ObservableList<Pet> obList = FXCollections.observableArrayList();
 			obList.add(new Pet(i + 1, name, breed, price, age, buyer));
-			System.out.println("name: " + data.get(i).get(5) + ", buyer: " + buyer);
-//			System.out.println("obList add" + name + ", " + breed + ", " + price + ", " + age);
 		}
 		System.out.print("obList" + obList);
 	}

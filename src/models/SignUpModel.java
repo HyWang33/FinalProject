@@ -16,21 +16,23 @@ public class SignUpModel extends DBConnect {
 			System.out.println("user exist");
 			return;
 		}
-		String SQL = "INSERT INTO Hongyang_pet_user(username, password, gender, email, birthday) " +
-					"VALUES(?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO Hongyang_pet_user(username, password, gender, email, birthday, role) " +
+					"VALUES(?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			String username = (String) userMap.get("username");
 			String password = (String) userMap.get("password");
 			String gender = (String) userMap.get("gender");
 			String email = (String) userMap.get("email");
 			Date birthday = (Date) userMap.get("birthday");
+			Integer role = (Integer) userMap.get("role");
 			pstmt.setString(1, username);
 			pstmt.setString(2, toHash(password));
 			pstmt.setString(3, gender);
-			pstmt.setString(4, null);
+			pstmt.setString(4, email);
 			pstmt.setDate(5, birthday);
+			pstmt.setInt(6, role);
 			pstmt.executeUpdate();
-			System.out.println("User inserted!");
+			System.out.println(role == 1 ? "User inserted!" : "Admin inserted");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

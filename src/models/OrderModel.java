@@ -44,15 +44,21 @@ public class OrderModel extends DBConnect {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Vector<Map> queryOrderList() {
+	public Vector<Map> queryOrderList(Map userMap) {
 		ResultSet rs = null;
 		String SQL = "SELECT * FROM Hongyang_pet_order";
+		Integer role = (Integer) userMap.get("role");
+		if (role == 1) {
+			SQL += " WHERE userId = ?";
+		}
 		Vector<Map> data = new Vector<>();
 		Vector<String> column = new Vector<String>();
-		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
-			
-			rs = stmt.executeQuery();
-			System.out.println("console log user");
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			if (role == 1) {
+				Integer userId = (Integer) userMap.get("id");
+				pstmt.setInt(1, userId);
+			}
+			rs = pstmt.executeQuery();
 			
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnNum = metaData.getColumnCount();
@@ -62,7 +68,6 @@ public class OrderModel extends DBConnect {
 				cols = metaData.getColumnName(i);
 				column.add(cols);
 			}
-			System.out.println("columnNum" + columnNum);
 			while (rs.next()) {
 				Vector<Object> row = new Vector<Object>(columnNum);
 				
@@ -80,8 +85,7 @@ public class OrderModel extends DBConnect {
 			
 			
 			
-			connection.close();
-			System.out.println("return data" + data);
+//			connection.close();
 			return data;
 			
 			

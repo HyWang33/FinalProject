@@ -29,7 +29,7 @@ public class LoginController {
 	
 	private LoginModel model;
 	private Stage stage;
-	private Integer role;
+	private Integer role = 1;
 	private Thread t1;
 
 	public LoginController() {
@@ -96,8 +96,9 @@ public class LoginController {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void checkCredentials(String username, String password) throws NoSuchAlgorithmException {
-		Map userMap = model.queryUser(username, password);
+		Map userMap = model.queryUser(username, password, role);
 		boolean isValid = (boolean) userMap.get("isValid");
 		alertCreate(isValid, username);
 		if (!isValid) return;
@@ -109,6 +110,7 @@ public class LoginController {
 			PetListController petListController = loader.getController();
 			petListController.setUser(userMap);
 			petListController.setStage(stage);
+			petListController.setRole(role);
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 		} catch (Exception e) {
@@ -131,9 +133,12 @@ public class LoginController {
 			AnchorPane root;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
 			root = (AnchorPane) loader.load();
-			stage.setTitle("Sign Up View");
+			stage.setTitle(role == 1 ? "Customer Sign Up View" : "Admin Sign Up View");
 			SignUpController signUpController = loader.getController();
 			signUpController.setStage(stage);
+			if (role == 2) {
+				signUpController.setRole(role);
+			}
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 		} catch (Exception e) {

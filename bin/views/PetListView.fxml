@@ -13,7 +13,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PetListController">
    <children>
-      <TableView fx:id="petTable" layoutX="75.0" layoutY="143.0" prefHeight="300.0" prefWidth="520.0">
+      <TableView fx:id="petTable" layoutX="75.0" layoutY="143.0" prefHeight="400.0" prefWidth="520.0">
         <columns>
             <!-- <TableColumn prefWidth="75.0" />
           <TableColumn prefWidth="75.0" text="photo" /> -->
@@ -33,8 +33,7 @@
       
       <Label fx:id="txtUsername" layoutX="624.0" layoutY="30.0" />
       <Label fx:id="txtBalance" layoutX="623.0" layoutY="76.0" text="100" />
-      <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="60.0" text="Back" />
-      <Pane fx:id="imagePane" layoutX="224.0" layoutY="210.0" prefHeight="200.0" prefWidth="200.0">
+      <Pane fx:id="imagePane" layoutX="224.0" layoutY="260.0" prefHeight="200.0" prefWidth="200.0">
          <children>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="70.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
             	<image>
@@ -48,7 +47,9 @@
             </Label>
          </children>
       </Pane>
-      <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" prefWidth="60.0" onAction="#onGoOrder" text="Order" />
-      <Button layoutX="305.0" layoutY="43.0" mnemonicParsing="false" prefWidth="62.0" onAction="#onGetList" text="Refresh" />
+      <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="60.0" text="Back" />
+      <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoOrder" prefWidth="60.0" text="Order" />
+      <Button layoutX="312.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGetList" prefWidth="62.0" text="Refresh" />
+      <Button fx:id="createButton" layoutX="224.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoCreate" prefWidth="60.0" visible="false" text="Create" />
    </children>
 </AnchorPane>

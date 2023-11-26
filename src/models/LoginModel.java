@@ -42,16 +42,16 @@ public class LoginModel extends DBConnect {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map queryUser(String username, String password) throws NoSuchAlgorithmException {
+	public Map queryUser(String username, String password, Integer role) throws NoSuchAlgorithmException {
 		ResultSet rs = null;
 		boolean isValid = false;
 		Map userMap = new HashMap();
 		userMap.put("isValid", isValid);
-		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ?";
-		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
-			stmt.setString(1, username);
-			
-			rs = stmt.executeQuery();
+		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ? AND role = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			pstmt.setString(1, username);
+			pstmt.setInt(2, role);
+			rs = pstmt.executeQuery();
 			System.out.println("console log user");
 			if (rs.next()) {
 				Integer id = rs.getInt("id");
@@ -60,12 +60,14 @@ public class LoginModel extends DBConnect {
 				String email = rs.getString("email");
 				Date birthday = rs.getDate("birthday");
 				Float balance = rs.getFloat("balance");
+//				Integer role = rs.getInt("role");
 				userMap.put("id", id);
 				userMap.put("username", username);
 				userMap.put("gender", gender);
 				userMap.put("email", email);
 				userMap.put("birthday", birthday);
 				userMap.put("balance", balance);
+				userMap.put("role", role);
 				isValid = toHash(password).equals(realPassword);
 				userMap.put("isValid", isValid);
 				return userMap;

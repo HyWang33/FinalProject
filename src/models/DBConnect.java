@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnect {
-	static final String DB_URL = "jdbc:mysql://www.papademas.net:3307/510fp?autoReconnect=true&useSSL=false";
+	static final String DB_URL = "jdbc:mysql://www.papademas.net:3307/510fp?tinyInt1isBit=false&autoReconnect=true&useSSL=false";
 	static final String USER = "fp510", PASSWORD = "510";
 	
 	protected static Connection connection;

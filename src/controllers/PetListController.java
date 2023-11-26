@@ -57,11 +57,14 @@ public class PetListController {
 	private Label txtUsername;
 	@FXML
 	private Label txtBalance;
+	@FXML
+	private Button createButton;
 	
 	private PetListModel model;
 	private Map userMap;
 	private Stage stage;
 	private Thread t1;
+	private Integer role = 1;
 	
 	private final ObservableList<Pet> obList = FXCollections.observableArrayList();
 
@@ -90,6 +93,13 @@ public class PetListController {
 		this.stage = stage;
 	}
 	
+	public void setRole(Integer role) {
+		this.role = role;
+		if (role == 2) {
+			this.createButton.setVisible(true);
+		}
+	}
+	
 	@FXML
     private void initialize(){
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().name);
@@ -100,7 +110,7 @@ public class PetListController {
         isSaledColumn.setCellValueFactory(new PropertyValueFactory<Pet, Boolean>("isSaled"));
         idColumn.setCellValueFactory(new PropertyValueFactory<Pet, Integer>("id"));
         
-		System.out.println("setItems");
+        System.out.println("setItems button userMap" + userMap);
         //绑定数据到TableView
         petTable.setItems(obList);
     }
@@ -111,16 +121,26 @@ public class PetListController {
             @Override
             public TableCell<Pet, Boolean> call(final TableColumn<Pet, Boolean> param) {
                 return new TableCell<Pet, Boolean>() {
-                    private final Button btn = new Button("Buy it");
-
+                    private final Button btn = new Button(role == 1 ? "Buy it" : "Update");
                     {
                         // 设置按钮点击事件
                         btn.setOnAction(event -> {
                             // 获取当前行的数据对象
                             Pet pet = getTableView().getItems().get(getIndex());
-                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
-                            onPurchase(pet);
+//                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
+                            System.out.println("buton role: " + role);
+                            if (role == 1) {
+//                            	onPurchase(pet);
+                            } else {
+                            	try {
+									onGoUpdate(pet);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+                            }
                         });
+           
                     }
 
                     // 渲染单元格
@@ -130,6 +150,12 @@ public class PetListController {
                         if (empty) {
                             setGraphic(null);
                         } else {
+                        	Pet pet = getTableView().getItems().get(getIndex());
+                        	System.out.println("pet isSaled disabled: " + pet.getIsSaled());
+                        	if (pet.getIsSaled()) {
+                        		System.out.println("set disabled");
+                        		btn.setDisable(true);
+                        	}
                             setGraphic(btn);
                         }
                     }
@@ -138,7 +164,29 @@ public class PetListController {
         };
     }
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void onGetList() {
+		this.imagePane.setVisible(true);
+		Vector<Map> data = model.queryPetList();
+		System.out.println("getList: " + data);
+		this.imagePane.setVisible(false);
+		obList.remove(0, obList.size());
+		for (int i = 0; i < data.size(); i++) {
+			Integer id = (Integer) data.get(i).get("id");
+			String name = (String) data.get(i).get("name");
+			String breed = (String) data.get(i).get("breed");
+			Float price = (Float) data.get(i).get("price");
+			Integer age = (Integer) data.get(i).get("age");
+			Boolean isSaled = (Boolean) data.get(i).get("isSaled");
+			
+			
+			obList.add(new Pet(id, name, breed, price, age, isSaled));
+			System.out.println("name: " + data.get(i).get(5) + ", isSaled: " + isSaled);
+		}
+		System.out.print("obList" + obList);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void onPurchase(Pet pet) {
 		t1.interrupt();
 		Float balance = (Float) userMap.get("balance");
@@ -149,9 +197,14 @@ public class PetListController {
 		Integer age = pet.getAge();
 		Float price = pet.getPrice();
 		String breed = pet.getBreed();
+		
+		if (balance < price) {
+			System.out.println("balance < price");
+			return;
+		}
+		
 		Map petInfo = new HashMap();
 		petInfo.put("petId", petId);
-		System.out.println("petListController userId: " + userId);
 		petInfo.put("userId", userId);
 		petInfo.put("price", price);
 		petInfo.put("balance", balance);
@@ -160,11 +213,8 @@ public class PetListController {
 		petInfo.put("age", age);
 		petInfo.put("buyer", username);
 		model.queryCreateOrder(petInfo);
-		if (balance < price) {
-			System.out.println("balance < price");
-			return;
-		}
-		
+		userMap.put("balance", balance - price);
+		this.txtBalance.setText(String.valueOf(balance - price));
 		
 //		onGoOrder();
 	}
@@ -182,6 +232,7 @@ public class PetListController {
 			orderController.setOrderStage(orderStage);
 			orderController.setUser(userMap);
 			Scene scene = new Scene(root);
+			orderStage.setTitle("Pet Order View");
 			orderStage.setScene(scene);
 //			stage.setScene(scene);
 			orderStage.show();
@@ -212,26 +263,38 @@ public class PetListController {
 		stage.setScene(scene);
 	}
 	
+	public void onGoCreate() throws IOException {
+		t1.interrupt();
+		AnchorPane root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetCreateView.fxml"));
+		root = (AnchorPane) loader.load();
+		PetCreateController petCreateController = loader.getController();
+		petCreateController.setStage(stage);
+		petCreateController.setUser(userMap);
+		Scene scene = new Scene(root);
+		stage.setTitle("Pet Create View");
+		stage.setScene(scene);
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void onGetList() {
-		this.imagePane.setVisible(true);
-		Vector<Map> data = model.queryPetList();
-		System.out.println("getList: " + data);
-		this.imagePane.setVisible(false);
-		obList.remove(0, obList.size());
-		for (int i = 0; i < data.size(); i++) {
-			Integer id = (Integer) data.get(i).get("id");
-			String name = (String) data.get(i).get("name");
-			String breed = (String) data.get(i).get("breed");
-			Float price = (Float) data.get(i).get("price");
-			Integer age = (Integer) data.get(i).get("age");
-			Boolean isSaled = (Boolean) data.get(i).get("isSaled");
-			
-			
-			obList.add(new Pet(id, name, breed, price, age, isSaled));
-			System.out.println("name: " + data.get(i).get(5) + ", isSaled: " + isSaled);
-		}
-		System.out.print("obList" + obList);
+	public void onGoUpdate(Pet pet) throws IOException {
+		t1.interrupt();
+		Map petMap = new HashMap();
+		petMap.put("id", pet.getId());
+		petMap.put("name", pet.getName());
+		petMap.put("age", String.valueOf(pet.getAge()));
+		petMap.put("breed", pet.getBreed());
+		petMap.put("price", String.valueOf(pet.getPrice()));
+		AnchorPane root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetCreateView.fxml"));
+		root = (AnchorPane) loader.load();
+		PetCreateController petCreateController = loader.getController();
+		petCreateController.setStage(stage);
+		petCreateController.setPet(petMap);
+		petCreateController.setUser(userMap);
+		Scene scene = new Scene(root);
+		stage.setTitle("Pet Update View");
+		stage.setScene(scene);
 	}
 	
 	

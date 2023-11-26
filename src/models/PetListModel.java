@@ -36,7 +36,7 @@ public class PetListModel extends DBConnect {
 						" PRIMARY KEY ( id ))";
 			stmt.executeUpdate(SQL);
 			System.out.println("Created table in given database...");
-			connection.close();
+//			connection.close();
 			
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -76,7 +76,6 @@ public class PetListModel extends DBConnect {
 			
 			
 			
-//			connection.close();
 			System.out.println("return data" + data);
 			return data;
 			
@@ -96,12 +95,14 @@ public class PetListModel extends DBConnect {
 		Float price = (Float) petInfo.get("price");
 		Float balance = (Float) petInfo.get("balance");
 		Float newBalance = balance - price;
-		String SQL = "UPDATE Hongyang_pet_list SET isSaled = ? WHERE id = ?" + petId;
+		System.out.println("update tinyint petId:" + petId);
+		String SQL = "UPDATE Hongyang_pet_list SET isSaled = ? WHERE id = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			pstmt.setInt(1, 1);
 			pstmt.setInt(2, petId);
 			pstmt.executeUpdate();
 		} catch (SQLException se) {
+			System.out.println("update error");
 			se.printStackTrace();
 		}
 		OrderModel.createOrder(petInfo);

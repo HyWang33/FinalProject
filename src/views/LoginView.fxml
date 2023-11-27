@@ -41,6 +41,6 @@
 			onAction="#onGoSignUp" text="Sign Up" />
 		<Label fx:id="lblError" layoutX="130.0" layoutY="212.0"
 			prefHeight="20.0" prefWidth="280.0" textFill="RED" />
-		<Button layoutX="20.0" layoutY="22.0" mnemonicParsing="false" prefWidth="80.0" onAction="#onBack" text="Back" />
+		<Button layoutX="18.0" layoutY="22.0" mnemonicParsing="false" prefWidth="80.0" onAction="#onBack" text="Back" />
 	</children>
 </AnchorPane>

@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.Vector;
 
 
-public class LoginModel extends DBConnect {
+public class UserListModel extends DBConnect {
 	Statement stmt = null;
 	
 	public void createTable() {
@@ -42,43 +43,61 @@ public class LoginModel extends DBConnect {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map queryUser(String username, String password, Integer role) throws NoSuchAlgorithmException {
+	public Vector<Map> queryUserList() {
 		ResultSet rs = null;
-		boolean isValid = false;
-		Map userMap = new HashMap();
-		userMap.put("isValid", isValid);
-		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ? AND role = ?";
-		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
-			pstmt.setString(1, username);
-			pstmt.setInt(2, role);
-			rs = pstmt.executeQuery();
+		String SQL = "SELECT * FROM Hongyang_pet_user WHERE role = 1 OR role = 2";
+		Vector<Map> data = new Vector<Map>();
+		Vector<String> column = new Vector<String>();
+		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
+			
+			rs = stmt.executeQuery();
 			System.out.println("console log user");
-			if (rs.next()) {
-				Integer id = rs.getInt("id");
-				String realPassword = rs.getString("password");
-				String gender = rs.getString("gender");
-				String email = rs.getString("email");
-				Date birthday = rs.getDate("birthday");
-				Float balance = rs.getFloat("balance");
-//				Integer role = rs.getInt("role");
-				userMap.put("id", id);
-				userMap.put("username", username);
-				userMap.put("password", password);
-				userMap.put("gender", gender);
-				userMap.put("email", email);
-				userMap.put("birthday", birthday);
-				userMap.put("balance", balance);
-				userMap.put("role", role);
-				isValid = toHash(password).equals(realPassword);
-				userMap.put("isValid", isValid);
-				return userMap;
+			
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnNum = metaData.getColumnCount();
+			
+			String cols = "";
+			for (int i = 1; i <= columnNum; i++) {
+				cols = metaData.getColumnName(i);
+				column.add(cols);
 			}
-			System.out.println("user not defined");
+			System.out.println("columnNum" + columnNum);
+			while (rs.next()) {
+				Map petMap = new HashMap();
+				Vector<Object> row = new Vector<Object>(columnNum);
+				
+				for (int i = 1; i <= columnNum; i++) {
+					petMap.put(column.get(i - 1), rs.getObject(i));
+//					row.addElement(i == 7 ? rs.getBoolean("isSaled") : rs.getObject(i));
+				}
+				data.addElement(petMap);
+			}
+			
+			
+			
+			System.out.println("return data" + data);
+			return data;
+			
+			
+			
 			
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
-		return userMap;
+		return data;
+	}
+	
+	public static boolean updateBalance(Integer userId, Float balance) {
+		String SQL = "UPDATE Hongyang_pet_user SET balance = ? WHERE id = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
+			stmt.setFloat(1, balance);
+			stmt.setInt(2, userId);
+			Integer res = stmt.executeUpdate();
+			return res > 0;
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+		return false;
 	}
 	
 	public String toHash(String password) throws NoSuchAlgorithmException {

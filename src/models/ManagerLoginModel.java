@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Vector;
 
 
-public class LoginModel extends DBConnect {
+public class ManagerLoginModel extends DBConnect {
 	Statement stmt = null;
 	
 	public void createTable() {
@@ -47,7 +47,7 @@ public class LoginModel extends DBConnect {
 		boolean isValid = false;
 		Map userMap = new HashMap();
 		userMap.put("isValid", isValid);
-		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ? AND role = ?";
+		String SQL = "SELECT * FROM Hongyang_pet_user WHERE username = ? AND role = 3";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			pstmt.setString(1, username);
 			pstmt.setInt(2, role);

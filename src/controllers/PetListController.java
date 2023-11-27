@@ -59,6 +59,8 @@ public class PetListController {
 	private Label txtBalance;
 	@FXML
 	private Button createButton;
+	@FXML
+	private Label txtRole;
 	
 	private PetListModel model;
 	private Map userMap;
@@ -97,6 +99,7 @@ public class PetListController {
 		this.role = role;
 		if (role == 2) {
 			this.createButton.setVisible(true);
+			this.txtRole.setText("Admin");
 		}
 	}
 	
@@ -110,8 +113,6 @@ public class PetListController {
         isSaledColumn.setCellValueFactory(new PropertyValueFactory<Pet, Boolean>("isSaled"));
         idColumn.setCellValueFactory(new PropertyValueFactory<Pet, Integer>("id"));
         
-        System.out.println("setItems button userMap" + userMap);
-        //绑定数据到TableView
         petTable.setItems(obList);
     }
 
@@ -123,14 +124,11 @@ public class PetListController {
                 return new TableCell<Pet, Boolean>() {
                     private final Button btn = new Button(role == 1 ? "Buy it" : "Update");
                     {
-                        // 设置按钮点击事件
                         btn.setOnAction(event -> {
-                            // 获取当前行的数据对象
                             Pet pet = getTableView().getItems().get(getIndex());
 //                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
-                            System.out.println("buton role: " + role);
                             if (role == 1) {
-//                            	onPurchase(pet);
+                            	onPurchase(pet);
                             } else {
                             	try {
 									onGoUpdate(pet);
@@ -143,17 +141,14 @@ public class PetListController {
            
                     }
 
-                    // 渲染单元格
                     @Override
                     public void updateItem(Boolean item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
                         } else {
-                        	Pet pet = getTableView().getItems().get(getIndex());
-                        	System.out.println("pet isSaled disabled: " + pet.getIsSaled());
-                        	if (pet.getIsSaled()) {
-                        		System.out.println("set disabled");
+                        	Pet currentPet = getTableView().getItems().get(getIndex());
+                        	if (currentPet.getIsSaled()) {
                         		btn.setDisable(true);
                         	}
                             setGraphic(btn);
@@ -168,9 +163,9 @@ public class PetListController {
 	public void onGetList() {
 		this.imagePane.setVisible(true);
 		Vector<Map> data = model.queryPetList();
-		System.out.println("getList: " + data);
 		this.imagePane.setVisible(false);
 		obList.remove(0, obList.size());
+		obList.clear();
 		for (int i = 0; i < data.size(); i++) {
 			Integer id = (Integer) data.get(i).get("id");
 			String name = (String) data.get(i).get("name");
@@ -181,9 +176,7 @@ public class PetListController {
 			
 			
 			obList.add(new Pet(id, name, breed, price, age, isSaled));
-			System.out.println("name: " + data.get(i).get(5) + ", isSaled: " + isSaled);
 		}
-		System.out.print("obList" + obList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -297,6 +290,25 @@ public class PetListController {
 		stage.setScene(scene);
 	}
 	
+	public void onUserUpdate() {
+		t1.interrupt();
+		try {
+			AnchorPane root;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
+			root = (AnchorPane) loader.load();
+			stage.setTitle(role == 1 ? "Customer Sign Up View" : "Admin Sign Up View");
+			SignUpController signUpController = loader.getController();
+			signUpController.setStage(stage);
+			signUpController.setUser(userMap);
+			if (role == 2) {
+				signUpController.setRole(role);
+			}
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		} catch (Exception e) {
+			System.out.println("Error occured while inflating view: " + e);
+		}
+	}
 	
 	public static class Pet {
 		private final SimpleIntegerProperty id;
@@ -308,7 +320,6 @@ public class PetListController {
 //        private final SimpleDateProperty birthday;
  
         private Pet(Integer id, String name, String breed, Float price, Integer age, Boolean isSaled) {
-        	System.out.println("Pet()");
 //        	this.setName(name);
 //        	this.setAge(age);
         	this.id = new SimpleIntegerProperty(id);
@@ -324,7 +335,7 @@ public class PetListController {
         	return id.get();
         }
         public void setId(Integer pId) {
-        	age.set(pId);
+        	id.set(pId);
         }
         
         public String getName() {

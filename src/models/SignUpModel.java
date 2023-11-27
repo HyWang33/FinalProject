@@ -32,7 +32,7 @@ public class SignUpModel extends DBConnect {
 			pstmt.setDate(5, birthday);
 			pstmt.setInt(6, role);
 			pstmt.executeUpdate();
-			System.out.println(role == 1 ? "User inserted!" : "Admin inserted");
+			System.out.println(role == 1 ? "User inserted!" : "Admin / Manager inserted");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,6 +65,27 @@ public class SignUpModel extends DBConnect {
 			stmt.setFloat(1, balance);
 			stmt.setInt(2, userId);
 			stmt.executeUpdate();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+	}
+	
+	public void updateUser(Map userMap) throws NoSuchAlgorithmException {
+		String SQL = "UPDATE Hongyang_pet_user SET username = ?, password = ?, gender = ?, email = ?, birthday = ? WHERE id = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			Integer id = (Integer) userMap.get("id");
+			String username = (String) userMap.get("username");
+			String password = (String) userMap.get("password");
+			String gender = (String) userMap.get("gender");
+			String email = (String) userMap.get("email");
+			Date birthday = (Date) userMap.get("birthday");
+			pstmt.setString(1, username);
+			pstmt.setString(2, toHash(password));
+			pstmt.setString(3, gender);
+			pstmt.setString(4, email);
+			pstmt.setDate(5, birthday);
+			pstmt.setInt(6, id);
+			pstmt.executeUpdate();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}

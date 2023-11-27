@@ -138,7 +138,7 @@ public class PetCreateController {
 	}
 	
 	public boolean ageValidator(String email) {
-		String EMAIL_REGEX = "^[1-9]\\d*$";
+		String EMAIL_REGEX = "^[1-9](\\d)*$";
 		Pattern pattern = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();

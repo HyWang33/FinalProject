@@ -17,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.LoginModel;
 
-public class LoginController {
+public class ManagerLoginController {
 	@FXML
 	private TextField txtUsername;
 
@@ -32,7 +32,7 @@ public class LoginController {
 	private Integer role = 1;
 	private Thread t1;
 
-	public LoginController() {
+	public ManagerLoginController() {
 		t1 = new Thread(()-> {
 			model = new LoginModel();
 		});
@@ -102,10 +102,6 @@ public class LoginController {
 		boolean isValid = (boolean) userMap.get("isValid");
 		alertCreate(isValid, username);
 		if (!isValid) return;
-		if (role == 3) {
-			onGoUserList(userMap);
-			return;
-		}
 		try {
 			AnchorPane root;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
@@ -123,23 +119,6 @@ public class LoginController {
 //		System.out.println(isValid ? "登录成功" : "登录失败");
 	}
 	
-	public void onGoUserList(Map userMap) {
-		try {
-			AnchorPane root;
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/UserListView.fxml"));
-			root = (AnchorPane) loader.load();
-			stage.setTitle("User List View");
-			UserListController userListController = loader.getController();
-			userListController.setUser(userMap);
-			userListController.setStage(stage);
-			userListController.setRole(role);
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-		} catch (Exception e) {
-			System.out.println("Error occured while inflating view: " + e);
-		}
-	}
-	
 	public void alertCreate(Boolean isValid, String username) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Login Tip");
@@ -154,14 +133,12 @@ public class LoginController {
 			AnchorPane root;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
 			root = (AnchorPane) loader.load();
-			if (role == 3) {
-				stage.setTitle("Manager Sign Up View");
-			} else {
-				stage.setTitle(role == 1 ? "Customer Sign Up View" : "Admin Sign Up View");
-			}
+			stage.setTitle(role == 1 ? "Customer Sign Up View" : "Admin Sign Up View");
 			SignUpController signUpController = loader.getController();
 			signUpController.setStage(stage);
-			signUpController.setRole(role);
+			if (role == 2) {
+				signUpController.setRole(role);
+			}
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 		} catch (Exception e) {

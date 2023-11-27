@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.time.LocalDate;
 
 import javafx.fxml.FXML;
@@ -45,7 +46,7 @@ public class SignUpController {
 	
 	private SignUpModel model;
 	private Stage stage;
-	private Map userMap;
+	private Map userMap = new HashMap();
 	private Thread t1;
 	private Integer role = 1;
 	
@@ -62,6 +63,15 @@ public class SignUpController {
 	
 	public void setUser(Map userMap) {
 		this.userMap = userMap;
+		if (userMap.containsKey("id")) {
+			Date birthday = (Date) userMap.get("birthday");
+			this.txtUsername.setText((String) userMap.get("username"));;
+			this.txtPassword.setText((String) userMap.get("password"));
+			this.genderChoiceBox.setValue((String) userMap.get("gender"));
+			this.txtEmail.setText((String) userMap.get("email"));
+			this.datePicker.setValue(birthday.toLocalDate());
+			System.out.println("signup get userMap:" + userMap);
+		}
 	}
 	
 	public void setRole(Integer role) {
@@ -97,23 +107,28 @@ public class SignUpController {
 			lblError.setText("Password Cannot be empty or spaces");
 			return;
 		}
-		if (email == null || email.trim().equals("")) {
-			lblError.setText("Email Cannot be empty or spaces");
-			return;
-		}
-		if (!emailValidator(email)) {
+//		if (email == null || email.trim().equals("")) {
+//			lblError.setText("Email Cannot be empty or spaces");
+//			return;
+//		}
+		if (email != null && !email.trim().equals("") && !emailValidator(email)) {
 			lblError.setText("Email is not valid");
 			return;
 		}
 		
-		Map userMap = new HashMap();
-		userMap.put("username", username);
-		userMap.put("password", password);
-		userMap.put("gender", gender);
-		userMap.put("email", email);
-		userMap.put("birthday", java.sql.Date.valueOf(birthday));
-		userMap.put("role", role);
-		model.createUser(userMap);
+		Map userInfo = new HashMap();
+		userInfo.put("username", username);
+		userInfo.put("password", password);
+		userInfo.put("gender", gender);
+		userInfo.put("email", email);
+		userInfo.put("birthday", java.sql.Date.valueOf(birthday));
+		userInfo.put("role", role);
+		if (userMap.containsKey("id")) {
+			userInfo.put("id", userMap.get("id"));
+			model.updateUser(userInfo);
+		} else {
+			model.createUser(userInfo);
+		}
 	}
 	
 	public boolean emailValidator(String email) {
@@ -124,6 +139,14 @@ public class SignUpController {
 	}
 	
 	public void onGoBack() throws IOException {
+		if ((Integer) userMap.get("role") == 3 && userMap.containsKey("id")) {
+			onGoUserList();
+			return;
+		}
+		if (userMap.containsKey("id")) {
+			onGoPet();
+			return;
+		}
 		t1.interrupt();
 		AnchorPane root;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
@@ -132,8 +155,43 @@ public class SignUpController {
 		loginController.setStage(stage);
 		loginController.setRole(role);
 		Scene scene = new Scene(root);
-		stage.setTitle(role == 1 ? "Customer Login View" : "Admin Login View");
+		if (role == 3) {
+			stage.setTitle("Manager Login View");
+		} else {
+			stage.setTitle(role == 1 ? "Customer Login View" : "Admin Login View");
+		}
+		
 		stage.setScene(scene);
+	}
+	
+	public void onGoPet() throws IOException {
+		AnchorPane root;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
+		root = (AnchorPane) loader.load();
+		stage.setTitle("Pet List View");
+		PetListController petListController = loader.getController();
+		petListController.setUser(userMap);
+		petListController.setStage(stage);
+		petListController.setRole(role);
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+	}
+	
+	public void onGoUserList() {
+		try {
+			AnchorPane root;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/UserListView.fxml"));
+			root = (AnchorPane) loader.load();
+			stage.setTitle("User List View");
+			UserListController userListController = loader.getController();
+			userListController.setUser(userMap);
+			userListController.setStage(stage);
+			userListController.setRole(role);
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		} catch (Exception e) {
+			System.out.println("Error occured while inflating view: " + e);
+		}
 	}
 	
 	public void alertCreate(Boolean isValid, String username) {

@@ -12,23 +12,23 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PetListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserListController">
    <stylesheets>
 		<URL value="@./test.css" />
 	</stylesheets>
    <children>
-      <TableView fx:id="petTable" layoutX="75.0" layoutY="143.0" prefHeight="400.0" prefWidth="520.0">
+      <TableView fx:id="petTable" layoutX="75.0" layoutY="143.0" prefHeight="420.0" prefWidth="540.0">
         <columns>
             <!-- <TableColumn prefWidth="75.0" />
           <TableColumn prefWidth="75.0" text="photo" /> -->
           <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" />
-          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="name" />
-          <TableColumn fx:id="breedColumn" prefWidth="75.0" text="breed" />
-          <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
-          <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price" />
+          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="userName" />
+          <TableColumn fx:id="genderColumn" prefWidth="75.0" text="gender" />
+          <TableColumn fx:id="emailColumn" prefWidth="73.0" text="email" />
+          <TableColumn fx:id="roleColumn" prefWidth="75.0" text="role" />
           <!-- <TableColumn prefWidth="77.0" text="birthday" /> -->
-          <TableColumn fx:id="isSaledColumn" prefWidth="73.0" text="is saled" />
-          <TableColumn fx:id="operateColumn" prefWidth="73.0" text="operate" />
+          <TableColumn fx:id="balanceColumn" prefWidth="73.0" text="balance" />
+          <TableColumn fx:id="operateColumn" prefWidth="100.0" text="operate" />
         </columns>
       </TableView>
       <HBox layoutX="495.0" layoutY="6.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FFF; -fx-border-color: #EEE;" />
@@ -55,8 +55,8 @@
          </children>
       </Pane>
       <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="60.0" text="Back" />
-      <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoOrder" prefWidth="60.0" text="Order" />
-      <Button layoutX="312.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGetList" prefWidth="62.0" text="Refresh" />
+      <!-- <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoOrder" prefWidth="60.0" text="Order" /> -->
+      <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGetList" prefWidth="62.0" text="Refresh" />
       <Button fx:id="createButton" layoutX="224.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoCreate" prefWidth="60.0" text="Create" visible="false" />
    </children>
 </AnchorPane>

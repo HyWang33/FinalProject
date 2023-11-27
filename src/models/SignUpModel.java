@@ -11,10 +11,10 @@ import java.util.Map;
 public class SignUpModel extends DBConnect {
 	
 	@SuppressWarnings("rawtypes")
-	public void createUser(Map userMap) throws NoSuchAlgorithmException {
+	public Boolean createUser(Map userMap) throws NoSuchAlgorithmException {
 		if (queryExistName((String) userMap.get("username"))) {
 			System.out.println("user exist");
-			return;
+			return false;
 		}
 		String SQL = "INSERT INTO Hongyang_pet_user(username, password, gender, email, birthday, role) " +
 					"VALUES(?, ?, ?, ?, ?, ?)";
@@ -31,12 +31,12 @@ public class SignUpModel extends DBConnect {
 			pstmt.setString(4, email);
 			pstmt.setDate(5, birthday);
 			pstmt.setInt(6, role);
-			pstmt.executeUpdate();
-			System.out.println(role == 1 ? "User inserted!" : "Admin / Manager inserted");
+			Integer res = pstmt.executeUpdate();
+			return res > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-//		return false;
+		return false;
 	}
 	
 	public boolean queryExistName(String username) {
@@ -59,18 +59,20 @@ public class SignUpModel extends DBConnect {
 		return false;
 	}
 	
-	public static void updateBalance(Integer userId, Float balance) {
+	public static Boolean updateBalance(Integer userId, Float balance) {
 		String SQL = "UPDATE Hongyang_pet_user SET balance = ? WHERE id = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			stmt.setFloat(1, balance);
 			stmt.setInt(2, userId);
-			stmt.executeUpdate();
+			Integer res = stmt.executeUpdate();
+			return res > 0;
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
+		return false;
 	}
 	
-	public void updateUser(Map userMap) throws NoSuchAlgorithmException {
+	public Boolean updateUser(Map userMap) throws NoSuchAlgorithmException {
 		String SQL = "UPDATE Hongyang_pet_user SET username = ?, password = ?, gender = ?, email = ?, birthday = ? WHERE id = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			Integer id = (Integer) userMap.get("id");
@@ -85,10 +87,12 @@ public class SignUpModel extends DBConnect {
 			pstmt.setString(4, email);
 			pstmt.setDate(5, birthday);
 			pstmt.setInt(6, id);
-			pstmt.executeUpdate();
+			Integer res = pstmt.executeUpdate();
+			return res > 0;
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
+		return false;
 	}
 	
 	public String toHash(String password) throws NoSuchAlgorithmException {

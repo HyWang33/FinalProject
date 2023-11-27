@@ -21,7 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import models.LoginModel;
 import models.SignUpModel;
 
 public class SignUpController {
@@ -125,9 +124,11 @@ public class SignUpController {
 		userInfo.put("role", role);
 		if (userMap.containsKey("id")) {
 			userInfo.put("id", userMap.get("id"));
-			model.updateUser(userInfo);
+			Boolean res = model.updateUser(userInfo);
+			alertUpdate(res, username);
 		} else {
-			model.createUser(userInfo);
+			Boolean res = model.createUser(userInfo);
+			alertCreate(res, username);
 		}
 	}
 	
@@ -139,7 +140,7 @@ public class SignUpController {
 	}
 	
 	public void onGoBack() throws IOException {
-		if ((Integer) userMap.get("role") == 3 && userMap.containsKey("id")) {
+		if (role == 3 && userMap.containsKey("id")) {
 			onGoUserList();
 			return;
 		}
@@ -198,7 +199,14 @@ public class SignUpController {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Sign Up Tip");
 		alert.setHeaderText(isValid ? "Sign Up Successfully" : "Sign Up Faild");
-		alert.setContentText(isValid ? "Congratulation, " + username + "!" : "Admin Sign Up Failed");
+		alert.setContentText(isValid ? "Congratulation, " + username + " is created!" : "Admin Sign Up Failed");
+		alert.showAndWait();
+	}
+	public void alertUpdate(Boolean isValid, String username) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Update Tip");
+		alert.setHeaderText(isValid ? "Update Successfully" : "Update Faild");
+		alert.setContentText(isValid ? "Congratulation, " + username + " is updated!" : "Admin Update Failed");
 		alert.showAndWait();
 	}
 }

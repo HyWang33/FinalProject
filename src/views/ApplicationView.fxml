@@ -12,22 +12,22 @@
    <children>
       <Pane layoutX="66.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoCustomer" text="Customer" />
+            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoCustomer" prefWidth="70.0" text="Customer" />
          </children>
       </Pane>
       <Pane layoutX="331.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
          <children>
-            <Button layoutX="73.0" layoutY="129.0" mnemonicParsing="false" onAction="#onGoAdmin" text="Admin" />
+            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoAdmin" prefWidth="70.0" text="Admin" />
          </children>
       </Pane>
       <Pane layoutX="66.0" layoutY="285.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoManager" text="Manager" />
+            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoManager" prefWidth="70.0" text="Manager" />
          </children>
       </Pane>
       <Pane layoutX="331.0" layoutY="285.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
          <children>
-            <Button layoutX="73.0" layoutY="129.0" mnemonicParsing="false" onAction="#onExit" text="Exit" />
+            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onExit" prefWidth="70.0" text="Exit" />
          </children>
       </Pane>
    </children>

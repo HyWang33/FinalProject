@@ -15,7 +15,7 @@
 		<URL value="@./test.css" />
 	</stylesheets>
    <children>
-      <Button layoutX="29.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" text="Back" />
+      <Button layoutX="29.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="50.0" text="Back" />
       <Pane layoutX="50.0" layoutY="90.0" prefHeight="280.0" prefWidth="500.0">
          <children>
             <Label layoutX="12.0" layoutY="33.0" text="UserName" />

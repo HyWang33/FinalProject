@@ -45,7 +45,7 @@ public class PetCreateController {
 	private Map userMap;
 	private Thread t1;
 	private Integer role = 2;
-	private Map petMap;
+	private Map petMap = new HashMap();
 	
 	public PetCreateController() {
 		t1 = new Thread(()-> {
@@ -162,7 +162,7 @@ public class PetCreateController {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(petMap.containsKey("id") ?"Update pet tip" : "Create pet tip");
 		alert.setHeaderText(isValid ? "Operate Successfully" : "Operate Faild");
-		alert.setContentText(isValid ? "Congratulation, " + username + "!" : "Operate Faild");
+		alert.setContentText(isValid ? "Operate " + username + " successfully!" : "Operate Faild");
 		alert.showAndWait();
 	}
 }

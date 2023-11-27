@@ -56,10 +56,10 @@ public class PetCreateModel extends DBConnect {
 	}
 	
 	public Boolean updatePet(Map petMap) {
-		if (queryExistName((String) petMap.get("name"))) {
-			System.out.println("user exist");
-			return false;
-		}
+//		if (queryExistName((String) petMap.get("name"))) {
+//			System.out.println("user exist");
+//			return false;
+//		}
 		String SQL = "UPDATE Hongyang_pet_list SET name = ?, price = ?, breed = ?, age = ? WHERE (id = ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			Integer id = (Integer) petMap.get("id");
@@ -73,7 +73,7 @@ public class PetCreateModel extends DBConnect {
 			pstmt.setInt(4, age);
 			pstmt.setInt(5, id);
 			Integer res = pstmt.executeUpdate();
-			System.out.println("pet created: " + res);
+			System.out.println("pet update: " + res);
 			return res > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,6 +90,19 @@ public class PetCreateModel extends DBConnect {
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
+	}
+	
+	public Boolean deletePet(Integer petId) {
+		String SQL = "DELETE FROM Hongyang_pet_list WHERE id = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+			pstmt.setInt(1, petId);
+			Integer res = pstmt.executeUpdate();
+			return res > 0;
+		} catch (SQLException se) {
+			System.out.println("update error");
+			se.printStackTrace();
+		}
+		return false;
 	}
 	
 	public String toHash(String password) throws NoSuchAlgorithmException {

@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.PetCreateModel;
@@ -33,6 +34,8 @@ public class PetCreateController {
 	private TextField txtPrice;
 	@FXML
 	private TextField txtAge;
+	@FXML
+	private Button deleteButton;
 	
 	@FXML
     private void initialize(){
@@ -76,6 +79,11 @@ public class PetCreateController {
 		this.txtPrice.setText(price);
 		this.breedChoiceBox.setValue(breed);
 		this.txtAge.setText(age);
+		if (petMap.containsKey("id")) {
+			if (role == 2) {
+				deleteButton.setVisible(true);
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -106,10 +114,10 @@ public class PetCreateController {
 			lblError.setText("Pet price Cannot be empty or spaces");
 			return;
 		}
-//		if (!ageValidator(price)) {
-//			lblError.setText("Pet age is not valid");
-//			return;
-//		}
+		if (!ageValidator(age)) {
+			lblError.setText("Pet age is not valid");
+			return;
+		}
 		if (!priceValidator(price) || Float.parseFloat(price) <= 0) {
 			lblError.setText("Pet price is not valid");
 			return;
@@ -158,11 +166,30 @@ public class PetCreateController {
 		stage.setScene(scene);
 	}
 	
+	public void onDelete() throws IOException {
+		t1.interrupt();
+		Integer petId = (Integer) petMap.get("id");
+		String name = (String) petMap.get("name");
+		Boolean res = model.deletePet(petId);
+		alertDelete(res, name);
+		onGoBack();
+	}
+	
 	public void alertCreate(Boolean isValid, String username) {
 		Alert alert = new Alert(AlertType.INFORMATION);
+		String operateText = petMap.containsKey("id") ? "Update" : "Create";
 		alert.setTitle(petMap.containsKey("id") ?"Update pet tip" : "Create pet tip");
-		alert.setHeaderText(isValid ? "Operate Successfully" : "Operate Faild");
-		alert.setContentText(isValid ? "Operate " + username + " successfully!" : "Operate Faild");
+		alert.setHeaderText(isValid ? operateText + " Successfully" : operateText + " Faild");
+		alert.setContentText(isValid ? operateText + " " + username + " successfully!" : operateText + " Faild");
+		alert.showAndWait();
+	}
+	
+	public void alertDelete(Boolean isValid, String username) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		String operateText = petMap.containsKey("id") ? "Update" : "Create";
+		alert.setTitle("Delete tip");
+		alert.setHeaderText(isValid ?"Delete Successfully" : "Delete Faild");
+		alert.setContentText("Delete " + username + (isValid ? " successfully!" :" Faild!"));
 		alert.showAndWait();
 	}
 }

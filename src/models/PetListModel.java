@@ -109,7 +109,6 @@ public class PetListModel extends DBConnect {
 		SignUpModel.updateBalance(userId, newBalance);
 	}
 	
-	
 }
 
 

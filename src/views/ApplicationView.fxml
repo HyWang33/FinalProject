@@ -2,6 +2,8 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
@@ -10,24 +12,45 @@
 		<URL value="@./test.css" />
 	</stylesheets>
    <children>
-      <Pane layoutX="66.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
+      <Pane layoutX="66.0" layoutY="48.0" prefHeight="220.0" prefWidth="220.0" style="-fx-border-color: #eee; -fx-background-color: #FFF;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoCustomer" prefWidth="70.0" text="Customer" />
+            <Button layoutX="76.0" layoutY="170.0" mnemonicParsing="false" onAction="#onGoCustomer" prefWidth="70.0" text="Customer" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="30.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            	<image>
+                  <Image url="@/images/pet-bg.png" />
+              	</image>
+              	<preserveRatio>false</preserveRatio>
+            </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="331.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
+      <Pane layoutX="331.0" layoutY="48.0" prefHeight="220.0" prefWidth="220.0" style="-fx-border-color: #eee; -fx-background-color: #FFF;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoAdmin" prefWidth="70.0" text="Admin" />
+            <Button layoutX="76.0" layoutY="170.0" mnemonicParsing="false" onAction="#onGoAdmin" prefWidth="70.0" text="Admin" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            	<image>
+                  <Image url="@/images/admin-bg.png" />
+              	</image>
+            </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="66.0" layoutY="285.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
+      <Pane layoutX="66.0" layoutY="296.0" prefHeight="220.0" prefWidth="220.0" style="-fx-border-color: #eee; -fx-background-color: #FFF;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onGoManager" prefWidth="70.0" text="Manager" />
+            <Button layoutX="76.0" layoutY="170.0" mnemonicParsing="false" onAction="#onGoManager" prefWidth="70.0" text="Manager" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            	<image>
+                  <Image url="@/images/manager-bg.png" />
+              	</image>
+            </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="331.0" layoutY="285.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #999;">
+      <Pane layoutX="331.0" layoutY="296.0" prefHeight="220.0" prefWidth="220.0" style="-fx-border-color: #eee; -fx-background-color: #FFF;">
          <children>
-            <Button layoutX="64.0" layoutY="127.0" mnemonicParsing="false" onAction="#onExit" prefWidth="70.0" text="Exit" />
+            <Button layoutX="76.0" layoutY="170.0" mnemonicParsing="false" onAction="#onExit" prefWidth="70.0" text="Exit" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="30.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            	<image>
+                  <Image url="@/images/exit-bg.png" />
+              	</image>
+            </ImageView>
          </children>
       </Pane>
    </children>

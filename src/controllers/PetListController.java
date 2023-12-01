@@ -73,7 +73,6 @@ public class PetListController {
 	public PetListController() {
 		t1 = new Thread(() -> {
 			model = new PetListModel();
-			System.out.print("petListController");
 			this.imagePane.setVisible(true);
 	        
 			onGetList();
@@ -84,7 +83,6 @@ public class PetListController {
 	// get user info from LoginController and set data
 	public void setUser(Map userMap) {
 		this.userMap = userMap;
-		System.out.println("setUser:" + userMap);
 		String username = (String) userMap.get("username");
 		Float balance = (Float) userMap.get("balance");
 		this.txtUsername.setText(username);
@@ -126,7 +124,6 @@ public class PetListController {
                     {
                         btn.setOnAction(event -> {
                             Pet pet = getTableView().getItems().get(getIndex());
-//                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
                             if (role == 1) {
                             	onPurchase(pet);
                             } else {
@@ -193,6 +190,7 @@ public class PetListController {
 		
 		if (balance < price) {
 			System.out.println("balance < price");
+			alertBalance();
 			return;
 		}
 		
@@ -205,11 +203,15 @@ public class PetListController {
 		petInfo.put("breed", breed);
 		petInfo.put("age", age);
 		petInfo.put("buyer", username);
-		model.queryCreateOrder(petInfo);
-		userMap.put("balance", balance - price);
-		this.txtBalance.setText(String.valueOf(balance - price));
+		Boolean valid = model.queryCreateOrder(petInfo);
+		BigDecimal decimalBalance = BigDecimal.valueOf(balance).subtract(BigDecimal.valueOf(price));
+		decimalBalance = decimalBalance.setScale(2, RoundingMode.HALF_UP);
+		float newBalance = decimalBalance.floatValue();
+		userMap.put("balance", newBalance);
+		this.txtBalance.setText(String.valueOf(newBalance));
+		alertCreate(valid, name);
+		onRefresh();
 		
-//		onGoOrder();
 	}
 	
 	public void onGoOrder() {
@@ -238,9 +240,17 @@ public class PetListController {
 	
 	public void alertCreate(Boolean isValid, String username) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Buy Tip");
-		alert.setHeaderText(isValid ? "Buy Successfully" : "Buy Faild");
-		alert.setContentText(isValid ? "Welcome, " + username + "!" : "The username or password is incorrect!");
+		alert.setTitle("Purchase Tip");
+		alert.setHeaderText(isValid ? "Purchase Successfully" : "Purchase Faild");
+		alert.setContentText(isValid ? "Purchase " + username + " successfully!" : "Purchase faild!");
+		alert.showAndWait();
+	}
+	
+	public void alertBalance() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Purchase Tip");
+		alert.setHeaderText("Purchase Faild");
+		alert.setContentText("Insufficient balance in your account.");
 		alert.showAndWait();
 	}
 	
@@ -303,6 +313,23 @@ public class PetListController {
 			if (role == 2) {
 				signUpController.setRole(role);
 			}
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		} catch (Exception e) {
+			System.out.println("Error occured while inflating view: " + e);
+		}
+	}
+	
+	public void onRefresh() {
+		try {
+			AnchorPane root;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
+			root = (AnchorPane) loader.load();
+			stage.setTitle("Pet List View");
+			PetListController petListController = loader.getController();
+			petListController.setUser(userMap);
+			petListController.setStage(stage);
+			petListController.setRole(role);
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 		} catch (Exception e) {

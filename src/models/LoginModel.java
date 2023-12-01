@@ -60,7 +60,6 @@ public class LoginModel extends DBConnect {
 				String email = rs.getString("email");
 				Date birthday = rs.getDate("birthday");
 				Float balance = rs.getFloat("balance");
-//				Integer role = rs.getInt("role");
 				userMap.put("id", id);
 				userMap.put("username", username);
 				userMap.put("password", password);

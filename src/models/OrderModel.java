@@ -76,8 +76,8 @@ public class OrderModel extends DBConnect {
 				
 				orderMap.put("breed", rs.getObject("breed"));
 				orderMap.put("age", rs.getObject("age"));
-				orderMap.put("birthday", rs.getObject("birthday"));
-				orderMap.put("isSaled", rs.getObject("isSaled"));
+//				orderMap.put("birthday", rs.getObject("birthday"));
+//				orderMap.put("isSaled", rs.getObject("isSaled"));
 				orderMap.put("price", rs.getObject("price"));
 				orderMap.put("buyer", rs.getObject("buyer"));
 				data.addElement(orderMap);

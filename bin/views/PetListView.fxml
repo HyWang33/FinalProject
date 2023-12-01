@@ -27,7 +27,7 @@
           <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
           <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price" />
           <!-- <TableColumn prefWidth="77.0" text="birthday" /> -->
-          <TableColumn fx:id="isSaledColumn" prefWidth="73.0" text="is saled" />
+          <TableColumn fx:id="isSaledColumn" prefWidth="73.0" text="is sold" />
           <TableColumn fx:id="operateColumn" prefWidth="73.0" text="operate" />
         </columns>
       </TableView>
@@ -56,7 +56,7 @@
       </Pane>
       <Button layoutX="48.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoBack" prefWidth="60.0" text="Back" />
       <Button layoutX="397.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoOrder" prefWidth="60.0" text="Order" />
-      <Button layoutX="312.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGetList" prefWidth="62.0" text="Refresh" />
+      <Button layoutX="312.0" layoutY="43.0" mnemonicParsing="false" onAction="#onRefresh" prefWidth="62.0" text="Refresh" />
       <Button fx:id="createButton" layoutX="224.0" layoutY="43.0" mnemonicParsing="false" onAction="#onGoCreate" prefWidth="60.0" text="Create" visible="false" />
    </children>
 </AnchorPane>

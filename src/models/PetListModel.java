@@ -1,5 +1,7 @@
 package models;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -89,24 +91,28 @@ public class PetListModel extends DBConnect {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void queryCreateOrder(Map petInfo) {
+	public Boolean queryCreateOrder(Map petInfo) {
 		Integer petId = (Integer) petInfo.get("petId");
 		Integer userId = (Integer) petInfo.get("userId");
 		Float price = (Float) petInfo.get("price");
 		Float balance = (Float) petInfo.get("balance");
-		Float newBalance = balance - price;
-		System.out.println("update tinyint petId:" + petId);
+		BigDecimal decimalBalance = BigDecimal.valueOf(balance).subtract(BigDecimal.valueOf(price));
+		decimalBalance = decimalBalance.setScale(2, RoundingMode.HALF_UP);
+		float newBalance = decimalBalance.floatValue();
+		System.out.println("newBalance: " + newBalance);
 		String SQL = "UPDATE Hongyang_pet_list SET isSaled = ? WHERE id = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 			pstmt.setInt(1, 1);
 			pstmt.setInt(2, petId);
-			pstmt.executeUpdate();
+			Integer res = pstmt.executeUpdate();
+			return res > 0;
 		} catch (SQLException se) {
 			System.out.println("update error");
 			se.printStackTrace();
 		}
 		OrderModel.createOrder(petInfo);
 		SignUpModel.updateBalance(userId, newBalance);
+		return false;
 	}
 	
 }

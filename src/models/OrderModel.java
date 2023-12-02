@@ -99,6 +99,7 @@ public class OrderModel extends DBConnect {
 	
 	@SuppressWarnings("rawtypes")
 	public static void createOrder(Map orderInfo) {
+		System.out.println("createOrder model: " + orderInfo);
 		String SQL = "INSERT INTO Hongyang_pet_order(userId, petId, name, breed, age, price, buyer) " +
 				"VALUES(?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
@@ -109,7 +110,6 @@ public class OrderModel extends DBConnect {
 			String breed = (String) orderInfo.get("breed");
 			Integer age = (Integer) orderInfo.get("age");
 			Float price = (Float) orderInfo.get("price");
-			System.out.println("userId:" + userId);
 			pstmt.setInt(1, userId);
 			pstmt.setInt(2, petId);
 			pstmt.setString(3, name);

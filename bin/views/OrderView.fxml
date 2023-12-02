@@ -13,18 +13,18 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrderController">
    <stylesheets>
-		<URL value="@./test.css" />
+		<URL value="@./button.css" />
 	</stylesheets>
    <children>
-      <TableView fx:id="petOrderTable" layoutX="75.0" layoutY="143.0" prefHeight="400.0" prefWidth="520.0">
+      <TableView fx:id="petOrderTable" layoutX="75.0" layoutY="143.0" prefHeight="400.0" prefWidth="530.0">
         <columns>
             <!-- <TableColumn prefWidth="75.0" />
           <TableColumn prefWidth="75.0" text="photo" /> -->
-          <TableColumn fx:id="numberColumn" prefWidth="75.0" text="" />
+          <TableColumn fx:id="numberColumn" prefWidth="75.0" text="id" />
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="name" />
           <TableColumn fx:id="breedColumn" prefWidth="75.0" text="breed" />
           <TableColumn fx:id="ageColumn" prefWidth="73.0" text="age" />
-          <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price" />
+          <TableColumn fx:id="priceColumn" prefWidth="75.0" text="price($)" />
           <!-- <TableColumn prefWidth="77.0" text="birthday" /> -->
           <TableColumn fx:id="buyerColumn" prefWidth="73.0" text="buyer" />
           <!-- <TableColumn fx:id="operateColumn" prefWidth="73.0" text="operate" /> -->

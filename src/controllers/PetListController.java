@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -86,7 +87,7 @@ public class PetListController {
 		String username = (String) userMap.get("username");
 		Float balance = (Float) userMap.get("balance");
 		this.txtUsername.setText(username);
-		this.txtBalance.setText(String.valueOf(balance));
+		this.txtBalance.setText(String.valueOf(balance) + "$");
 	}
 	
 	public void setStage(Stage stage) {
@@ -145,6 +146,10 @@ public class PetListController {
                             setGraphic(null);
                         } else {
                         	Pet currentPet = getTableView().getItems().get(getIndex());
+//                        	TableRow<Pet> currentRow = getTableRow();
+//                        	if (currentRow == null) return;
+//                        	Pet currentPet = currentRow.getItem();
+                        	System.out.println("index isSaled: " + getIndex()  + ", " + currentPet.getIsSaled());
                         	if (currentPet.getIsSaled()) {
                         		btn.setDisable(true);
                         	}
@@ -163,6 +168,7 @@ public class PetListController {
 		this.imagePane.setVisible(false);
 		obList.remove(0, obList.size());
 		obList.clear();
+		petTable.getItems().clear();
 		for (int i = 0; i < data.size(); i++) {
 			Integer id = (Integer) data.get(i).get("id");
 			String name = (String) data.get(i).get("name");
@@ -174,6 +180,7 @@ public class PetListController {
 			
 			obList.add(new Pet(id, name, breed, price, age, isSaled));
 		}
+		petTable.setItems(obList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -208,7 +215,7 @@ public class PetListController {
 		decimalBalance = decimalBalance.setScale(2, RoundingMode.HALF_UP);
 		float newBalance = decimalBalance.floatValue();
 		userMap.put("balance", newBalance);
-		this.txtBalance.setText(String.valueOf(newBalance));
+		this.txtBalance.setText(String.valueOf(newBalance) + "$");
 		alertCreate(valid, name);
 		onRefresh();
 		
@@ -242,7 +249,7 @@ public class PetListController {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Purchase Tip");
 		alert.setHeaderText(isValid ? "Purchase Successfully" : "Purchase Faild");
-		alert.setContentText(isValid ? "Purchase " + username + " successfully!" : "Purchase faild!");
+		alert.setContentText(isValid ? "Purchase " + username + " successfully!" : "Purchase faild! \n(Or check your network)");
 		alert.showAndWait();
 	}
 	
@@ -261,6 +268,7 @@ public class PetListController {
 		root = (AnchorPane) loader.load();
 		LoginController loginController = loader.getController();
 		loginController.setStage(stage);
+		loginController.setRole(role);
 		Scene scene = new Scene(root);
 		stage.setTitle("Customer Login View");
 		stage.setScene(scene);
@@ -274,6 +282,7 @@ public class PetListController {
 		PetCreateController petCreateController = loader.getController();
 		petCreateController.setStage(stage);
 		petCreateController.setUser(userMap);
+		petCreateController.setRole(role);
 		Scene scene = new Scene(root);
 		stage.setTitle("Pet Create View");
 		stage.setScene(scene);
@@ -295,6 +304,7 @@ public class PetListController {
 		petCreateController.setStage(stage);
 		petCreateController.setPet(petMap);
 		petCreateController.setUser(userMap);
+		petCreateController.setRole(role);
 		Scene scene = new Scene(root);
 		stage.setTitle("Pet Update View");
 		stage.setScene(scene);

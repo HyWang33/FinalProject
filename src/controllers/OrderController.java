@@ -61,7 +61,6 @@ public class OrderController {
 	public OrderController() {
 		t1 = new Thread(() -> {
 			model = new OrderModel();
-			System.out.print("petListController");
 			this.imagePane.setVisible(true);
 			getPetList();
 		});
@@ -90,7 +89,6 @@ public class OrderController {
         buyerColumn.setCellValueFactory(cellData -> cellData.getValue().buyer);
         numberColumn.setCellValueFactory(new PropertyValueFactory<Pet, Integer>("number"));
         
-		System.out.println("setItems");
         //绑定数据到TableView
         petOrderTable.setItems(obList);
     }
@@ -108,7 +106,6 @@ public class OrderController {
                         btn.setOnAction(event -> {
                             // 获取当前行的数据对象
                             Pet pet = getTableView().getItems().get(getIndex());
-                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getBuyer());
                             puchasePet();
                         });
                     }
@@ -156,7 +153,6 @@ public class OrderController {
 	public void getPetList() {
 		this.imagePane.setVisible(true);
 		Vector<Map> data = model.queryOrderList(userMap);
-		System.out.println("getList: " + data);
 		this.imagePane.setVisible(false);
 		for (int i = 0; i < data.size(); i++) {
 			Map orderMap = (Map) data.get(i);
@@ -169,7 +165,6 @@ public class OrderController {
 //			ObservableList<Pet> obList = FXCollections.observableArrayList();
 			obList.add(new Pet(i + 1, name, breed, price, age, buyer));
 		}
-		System.out.print("obList" + obList);
 	}
 	
 	
@@ -183,7 +178,6 @@ public class OrderController {
 //        private final SimpleDateProperty birthday;
  
         private Pet(Integer number, String name, String breed, Float price, Integer age, String buyer) {
-        	System.out.println("Pet()");
 //        	this.setName(name);
 //        	this.setAge(age);
         	this.number = new SimpleIntegerProperty(number);

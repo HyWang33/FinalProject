@@ -51,7 +51,6 @@ public class UserListModel extends DBConnect {
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			
 			rs = stmt.executeQuery();
-			System.out.println("console log user");
 			
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnNum = metaData.getColumnCount();
@@ -61,7 +60,6 @@ public class UserListModel extends DBConnect {
 				cols = metaData.getColumnName(i);
 				column.add(cols);
 			}
-			System.out.println("columnNum" + columnNum);
 			while (rs.next()) {
 				Map petMap = new HashMap();
 				Vector<Object> row = new Vector<Object>(columnNum);
@@ -73,13 +71,7 @@ public class UserListModel extends DBConnect {
 				data.addElement(petMap);
 			}
 			
-			
-			
-			System.out.println("return data" + data);
 			return data;
-			
-			
-			
 			
 		} catch (SQLException se) {
 			se.printStackTrace();

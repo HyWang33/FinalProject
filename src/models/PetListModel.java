@@ -54,7 +54,6 @@ public class PetListModel extends DBConnect {
 		try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
 			
 			rs = stmt.executeQuery();
-			System.out.println("console log user");
 			
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnNum = metaData.getColumnCount();
@@ -64,7 +63,6 @@ public class PetListModel extends DBConnect {
 				cols = metaData.getColumnName(i);
 				column.add(cols);
 			}
-			System.out.println("columnNum" + columnNum);
 			while (rs.next()) {
 				Map petMap = new HashMap();
 				Vector<Object> row = new Vector<Object>(columnNum);
@@ -76,13 +74,7 @@ public class PetListModel extends DBConnect {
 				data.addElement(petMap);
 			}
 			
-			
-			
-			System.out.println("return data" + data);
 			return data;
-			
-			
-			
 			
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -105,13 +97,13 @@ public class PetListModel extends DBConnect {
 			pstmt.setInt(1, 1);
 			pstmt.setInt(2, petId);
 			Integer res = pstmt.executeUpdate();
+			OrderModel.createOrder(petInfo);
+			SignUpModel.updateBalance(userId, newBalance);
 			return res > 0;
 		} catch (SQLException se) {
 			System.out.println("update error");
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
-		OrderModel.createOrder(petInfo);
-		SignUpModel.updateBalance(userId, newBalance);
 		return false;
 	}
 	

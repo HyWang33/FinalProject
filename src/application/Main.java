@@ -20,10 +20,7 @@ public class Main extends Application {
 
 			stage = primaryStage;
 			
-			
 			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/ApplicationView.fxml"));
-//			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/LoginView.fxml"));
-//		    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/SignUpView.fxml"));
 	        AnchorPane root = (AnchorPane) loader.load();
 			Scene scene = new Scene(root);
 			ApplicationController applicationController = loader.getController();

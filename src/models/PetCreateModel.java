@@ -12,7 +12,7 @@ public class PetCreateModel extends DBConnect {
 	@SuppressWarnings("rawtypes")
 	public Boolean createPet(Map petMap) throws NoSuchAlgorithmException {
 		if (queryExistName((String) petMap.get("name"))) {
-			System.out.println("user exist");
+			System.out.println("pet exist");
 			return false;
 		}
 		String SQL = "INSERT INTO Hongyang_pet_list(name, price, breed, age) " +
@@ -30,7 +30,7 @@ public class PetCreateModel extends DBConnect {
 			System.out.println("pet created");
 			return res > 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error communication: " + e);
 		}
 		return false;
 	}
@@ -42,22 +42,21 @@ public class PetCreateModel extends DBConnect {
 			stmt.setString(1, name);
 			
 			rs = stmt.executeQuery();
-			System.out.println("console log user");
 			if (rs.next()) {
-				System.out.println("user rs" + rs.getInt("id"));
+				System.out.println("pet rs" + rs.getInt("id"));
 				return true;
 			}
-			System.out.println("user not defined");
+			System.out.println("pet not defined");
 			
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return false;
 	}
 	
 	public Boolean updatePet(Map petMap) {
 //		if (queryExistName((String) petMap.get("name"))) {
-//			System.out.println("user exist");
+//			System.out.println("pet exist");
 //			return false;
 //		}
 		String SQL = "UPDATE Hongyang_pet_list SET name = ?, price = ?, breed = ?, age = ? WHERE (id = ?)";
@@ -73,10 +72,9 @@ public class PetCreateModel extends DBConnect {
 			pstmt.setInt(4, age);
 			pstmt.setInt(5, id);
 			Integer res = pstmt.executeUpdate();
-			System.out.println("pet update: " + res);
 			return res > 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error communication: " + e);
 		}
 		return false;
 	}
@@ -88,7 +86,7 @@ public class PetCreateModel extends DBConnect {
 			stmt.setInt(2, userId);
 			stmt.executeUpdate();
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 	}
 	
@@ -100,7 +98,7 @@ public class PetCreateModel extends DBConnect {
 			return res > 0;
 		} catch (SQLException se) {
 			System.out.println("update error");
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return false;
 	}

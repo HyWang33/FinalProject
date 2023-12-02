@@ -34,7 +34,7 @@ public class SignUpModel extends DBConnect {
 			Integer res = pstmt.executeUpdate();
 			return res > 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error communication: " + e);
 		}
 		return false;
 	}
@@ -54,7 +54,7 @@ public class SignUpModel extends DBConnect {
 			System.out.println("user not defined");
 			
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return false;
 	}
@@ -67,7 +67,7 @@ public class SignUpModel extends DBConnect {
 			Integer res = stmt.executeUpdate();
 			return res > 0;
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return false;
 	}
@@ -90,7 +90,7 @@ public class SignUpModel extends DBConnect {
 			Integer res = pstmt.executeUpdate();
 			return res > 0;
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return false;
 	}

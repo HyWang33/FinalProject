@@ -69,7 +69,6 @@ public class SignUpController {
 			this.genderChoiceBox.setValue((String) userMap.get("gender"));
 			this.txtEmail.setText((String) userMap.get("email"));
 			this.datePicker.setValue(birthday.toLocalDate());
-			System.out.println("signup get userMap:" + userMap);
 		}
 	}
 	
@@ -106,10 +105,10 @@ public class SignUpController {
 			lblError.setText("Password Cannot be empty or spaces");
 			return;
 		}
-//		if (email == null || email.trim().equals("")) {
-//			lblError.setText("Email Cannot be empty or spaces");
-//			return;
-//		}
+		if (birthday == null || birthday.toString().trim().equals("")) {
+			lblError.setText("Birthday Cannot be empty");
+			return;
+		}
 		if (email != null && !email.trim().equals("") && !emailValidator(email)) {
 			lblError.setText("Email is not valid");
 			return;
@@ -125,6 +124,13 @@ public class SignUpController {
 		if (userMap.containsKey("id")) {
 			userInfo.put("id", userMap.get("id"));
 			Boolean res = model.updateUser(userInfo);
+			if (res) {
+				userMap.put("username", username);
+				userMap.put("password", password);
+				userMap.put("gender", gender);
+				userMap.put("email", email);
+				userMap.put("birthday", java.sql.Date.valueOf(birthday));
+			}
 			alertUpdate(res, username);
 		} else {
 			Boolean res = model.createUser(userInfo);
@@ -197,16 +203,18 @@ public class SignUpController {
 	
 	public void alertCreate(Boolean isValid, String username) {
 		Alert alert = new Alert(AlertType.INFORMATION);
+		String roleText = role == 1 ? "Customer" : role == 2 ? "Admin" : "Manager";
 		alert.setTitle("Sign Up Tip");
 		alert.setHeaderText(isValid ? "Sign Up Successfully" : "Sign Up Faild");
-		alert.setContentText(isValid ? "Congratulation, " + username + " is created!" : "Admin Sign Up Failed");
+		alert.setContentText(isValid ? "Congratulation: " + roleText + " " + username + " is created!" : "Username exist. \n(Or check your network)");
 		alert.showAndWait();
 	}
 	public void alertUpdate(Boolean isValid, String username) {
 		Alert alert = new Alert(AlertType.INFORMATION);
+		String roleText = role == 1 ? "Customer" : role == 2 ? "Admin" : "Manager";
 		alert.setTitle("Update Tip");
 		alert.setHeaderText(isValid ? "Update Successfully" : "Update Faild");
-		alert.setContentText(isValid ? "Congratulation, " + username + " is updated!" : "Admin Update Failed");
+		alert.setContentText(isValid ? "Congratulation, " + username + " is updated!" : roleText + " Update Failed. \n(Or check your network)");
 		alert.showAndWait();
 	}
 }

@@ -180,7 +180,7 @@ public class PetCreateController {
 		String operateText = petMap.containsKey("id") ? "Update" : "Create";
 		alert.setTitle(petMap.containsKey("id") ?"Update pet tip" : "Create pet tip");
 		alert.setHeaderText(isValid ? operateText + " Successfully" : operateText + " Faild");
-		alert.setContentText(isValid ? operateText + " " + username + " successfully!" : operateText + " Faild");
+		alert.setContentText(isValid ? operateText + " " + username + " successfully!" : operateText + " Faild! \n(Or check your network)");
 		alert.showAndWait();
 	}
 	
@@ -189,7 +189,7 @@ public class PetCreateController {
 		String operateText = petMap.containsKey("id") ? "Update" : "Create";
 		alert.setTitle("Delete tip");
 		alert.setHeaderText(isValid ?"Delete Successfully" : "Delete Faild");
-		alert.setContentText("Delete " + username + (isValid ? " successfully!" :" Faild!"));
+		alert.setContentText("Delete " + username + (isValid ? " successfully!" :" Faild! \n(Or check your network)"));
 		alert.showAndWait();
 	}
 }

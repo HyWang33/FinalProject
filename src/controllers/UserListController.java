@@ -79,7 +79,6 @@ public class UserListController {
 	public UserListController() {
 		t1 = new Thread(() -> {
 			model = new UserListModel();
-			System.out.print("petListController");
 			this.imagePane.setVisible(true);
 	        
 			onGetList();
@@ -90,7 +89,6 @@ public class UserListController {
 	// get user info from LoginController and set data
 	public void setUser(Map userMap) {
 		this.userMap = userMap;
-		System.out.println("setUser:" + userMap);
 		String username = (String) userMap.get("username");
 		Float balance = (Float) userMap.get("balance");
 		this.txtUsername.setText(username);
@@ -117,7 +115,7 @@ public class UserListController {
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
         genderColumn.setCellValueFactory(cellData -> cellData.getValue().gender);
         balanceColumn.setCellValueFactory(new PropertyValueFactory<User, Float>("balance"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("emial"));
+        emailColumn.setCellValueFactory(cellData -> cellData.getValue().email);
         operateColumn.setCellFactory(createButtonCellFactory());
         roleColumn.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
         idColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
@@ -131,12 +129,10 @@ public class UserListController {
             @Override
             public TableCell<User, Boolean> call(final TableColumn<User, Boolean> param) {
                 return new TableCell<User, Boolean>() {
-                    private final Button btn = new Button("Add Balance");
+                    private final Button btn = new Button("Update Balance");
                     {
                         btn.setOnAction(event -> {
                             User user = getTableView().getItems().get(getIndex());
-//                            System.out.println("Button clicked for: " + pet.getName() + " " + pet.getIsSaled());
-                  
                             onOpenDialog(user);
                         });
            
@@ -172,7 +168,6 @@ public class UserListController {
 			String email = (String) data.get(i).get("email");
 			Integer role = (Integer) data.get(i).get("role");
 			String roleText = role == 1 ? "Customer" : "Admin";
-			
 			obList.add(new User(id, username, gender, email, roleText, balance));
 		}
 	}
@@ -181,7 +176,7 @@ public class UserListController {
 		String username = (String) user.getName();
 		Integer id = (Integer) user.getId();
 		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Add balance");
+		dialog.setTitle("Update balance");
 		dialog.setHeaderText("Enter balance");
 		dialog.setContentText("Please enter balance for: " + username);
 		
@@ -213,43 +208,7 @@ public class UserListController {
 			alertCreate(res, username, balance);
 			onGetList();
 		});
-		if (result.isPresent()) {
-			System.out.println("Balance entry: " + result.get());
-		}
 	}
-	
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	public void onPurchase(User pet) {
-//		t1.interrupt();
-//		Float balance = (Float) userMap.get("balance");
-//		Integer userId = (Integer) userMap.get("id");
-//		String username = (String) userMap.get("username");
-//		Integer petId = pet.getId();
-//		String name = pet.getName();
-//		Integer age = pet.getAge();
-//		Float price = pet.getPrice();
-//		String breed = pet.getBreed();
-//		
-//		if (balance < price) {
-//			System.out.println("balance < price");
-//			return;
-//		}
-//		
-//		Map petInfo = new HashMap();
-//		petInfo.put("petId", petId);
-//		petInfo.put("userId", userId);
-//		petInfo.put("price", price);
-//		petInfo.put("balance", balance);
-//		petInfo.put("name", name);
-//		petInfo.put("breed", breed);
-//		petInfo.put("age", age);
-//		petInfo.put("buyer", username);
-//		model.queryCreateOrder(petInfo);
-//		userMap.put("balance", balance - price);
-//		this.txtBalance.setText(String.valueOf(balance - price));
-//		
-////		onGoOrder();
-//	}
 	
 	public void onGoOrder() {
 		try {
@@ -290,8 +249,9 @@ public class UserListController {
 		root = (AnchorPane) loader.load();
 		LoginController loginController = loader.getController();
 		loginController.setStage(stage);
+		loginController.setRole(role);
 		Scene scene = new Scene(root);
-		stage.setTitle("Customer Login View");
+		stage.setTitle("Manager Login View");
 		stage.setScene(scene);
 	}
 	
@@ -307,27 +267,6 @@ public class UserListController {
 		stage.setTitle("Pet Create View");
 		stage.setScene(scene);
 	}
-	
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	public void onGoUpdate(User pet) throws IOException {
-//		t1.interrupt();
-//		Map petMap = new HashMap();
-//		petMap.put("id", pet.getId());
-//		petMap.put("user", pet.getName());
-//		petMap.put("age", String.valueOf(pet.getAge()));
-//		petMap.put("breed", pet.getBreed());
-//		petMap.put("price", String.valueOf(pet.getPrice()));
-//		AnchorPane root;
-//		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetCreateView.fxml"));
-//		root = (AnchorPane) loader.load();
-//		PetCreateController petCreateController = loader.getController();
-//		petCreateController.setStage(stage);
-//		petCreateController.setPet(petMap);
-//		petCreateController.setUser(userMap);
-//		Scene scene = new Scene(root);
-//		stage.setTitle("Pet Update View");
-//		stage.setScene(scene);
-//	}
 	
 	public void onUserUpdate() {
 		t1.interrupt();
@@ -403,7 +342,7 @@ public class UserListController {
         public String getEmail() {
         	return email.get();
         }
-        public void setAge(String pEmail) {
+        public void setEmail(String pEmail) {
         	email.set(pEmail);
         }
         

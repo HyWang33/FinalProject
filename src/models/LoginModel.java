@@ -52,7 +52,6 @@ public class LoginModel extends DBConnect {
 			pstmt.setString(1, username);
 			pstmt.setInt(2, role);
 			rs = pstmt.executeQuery();
-			System.out.println("console log user");
 			if (rs.next()) {
 				Integer id = rs.getInt("id");
 				String realPassword = rs.getString("password");
@@ -75,7 +74,7 @@ public class LoginModel extends DBConnect {
 			System.out.println("user not defined");
 			
 		} catch (SQLException se) {
-			se.printStackTrace();
+			System.out.println("Error communication: " + se);
 		}
 		return userMap;
 	}

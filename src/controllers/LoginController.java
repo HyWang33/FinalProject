@@ -92,8 +92,6 @@ public class LoginController {
 		}
 		checkCredentials(username, password);
 		
-		System.out.println("click submit");
-		
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -144,7 +142,7 @@ public class LoginController {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Login Tip");
 		alert.setHeaderText(isValid ? "Login Successfully" : "Login Faild");
-		alert.setContentText(isValid ? "Welcome, " + username + "!" : "The username or password is incorrect!");
+		alert.setContentText(isValid ? "Welcome, " + username + "!" : "The username or password is incorrect! \n(Or check your network)");
 		alert.showAndWait();
 	}
 	

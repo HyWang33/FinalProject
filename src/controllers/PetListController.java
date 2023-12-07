@@ -146,10 +146,6 @@ public class PetListController {
                             setGraphic(null);
                         } else {
                         	Pet currentPet = getTableView().getItems().get(getIndex());
-//                        	TableRow<Pet> currentRow = getTableRow();
-//                        	if (currentRow == null) return;
-//                        	Pet currentPet = currentRow.getItem();
-                        	System.out.println("index isSaled: " + getIndex()  + ", " + currentPet.getIsSaled());
                         	if (currentPet.getIsSaled()) {
                         		btn.setDisable(true);
                         	}
@@ -335,13 +331,16 @@ public class PetListController {
 			AnchorPane root;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PetListView.fxml"));
 			root = (AnchorPane) loader.load();
-			stage.setTitle("Pet List View");
+			Stage petStage = new Stage();
+			petStage.setTitle("Pet List View");
 			PetListController petListController = loader.getController();
 			petListController.setUser(userMap);
-			petListController.setStage(stage);
+			petListController.setStage(petStage);
 			petListController.setRole(role);
 			Scene scene = new Scene(root);
-			stage.setScene(scene);
+			petStage.setScene(scene);
+			stage.close();
+			petStage.show();
 		} catch (Exception e) {
 			System.out.println("Error occured while inflating view: " + e);
 		}
